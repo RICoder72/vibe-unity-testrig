@@ -110,6 +110,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -140,6 +141,17 @@ namespace VibeUnity.Editor
         public string path = "Assets/Scenes";  // Path where to create the scene
         public string type = "DefaultGameObjects";  // Scene type if creating
         public bool addToBuild = false;  // Whether to add to build settings if creating
+    }
+    
+    /// <summary>
+    /// Data structure for component parameters
+    /// </summary>
+    [System.Serializable]
+    public class ComponentParameter
+    {
+        public string name;
+        public string value;
+        public string type; // "string", "int", "float", "bool", "GameObject", "Component"
     }
     
     /// <summary>
@@ -186,6 +198,10 @@ namespace VibeUnity.Editor
         public string text;
         public int fontSize;
         public string color;
+        
+        // Component attachment fields
+        public string componentType;
+        public ComponentParameter[] parameters;
     }
 
     /// <summary>
@@ -194,6 +210,11 @@ namespace VibeUnity.Editor
     /// </summary>
     public static class CLI
     {
+        /// <summary>
+        /// Flag to track whether we're currently processing a batch to optimize scene saving
+        /// </summary>
+        private static bool _isBatchProcessing = false;
+        
         #region Scene Creation Methods
         
         /// <summary>
@@ -383,6 +404,9 @@ namespace VibeUnity.Editor
                 Debug.Log($"[VibeUnityCLI]    └─ Vertex Color: Always in Gamma Space");
                 Debug.Log($"[VibeUnityCLI]    └─ Components: Canvas, CanvasScaler, GraphicRaycaster");
                 Debug.Log($"[VibeUnityCLI]    └─ Hierarchy: {GetGameObjectPath(canvasGO)}");
+                
+                // Save the scene after successful creation
+                SaveActiveScene();
                 return true;
             }
             catch (System.Exception e)
@@ -463,6 +487,9 @@ namespace VibeUnity.Editor
                 Debug.Log($"[VibeUnityCLI]    └─ Size: {width}x{height}");
                 Debug.Log($"[VibeUnityCLI]    └─ Anchor: {anchorPreset}");
                 Debug.Log($"[VibeUnityCLI]    └─ Hierarchy: {GetGameObjectPath(panelGO)}");
+                
+                // Save the scene after successful creation
+                SaveActiveScene();
                 return true;
             }
             catch (System.Exception e)
@@ -537,6 +564,9 @@ namespace VibeUnity.Editor
                 Debug.Log($"[VibeUnityCLI]    └─ Size: {width}x{height}");
                 Debug.Log($"[VibeUnityCLI]    └─ Anchor: {anchorPreset}");
                 Debug.Log($"[VibeUnityCLI]    └─ Hierarchy: {GetGameObjectPath(buttonGO)}");
+                
+                // Save the scene after successful creation
+                SaveActiveScene();
                 return true;
             }
             catch (System.Exception e)
@@ -591,12 +621,11 @@ namespace VibeUnity.Editor
                 GameObject textGO = new GameObject(textName);
                 textGO.transform.SetParent(parent.transform, false);
                 
-                // Add text component
-                Text textComponent = textGO.AddComponent<Text>();
+                // Add TextMeshPro text component
+                TextMeshProUGUI textComponent = textGO.AddComponent<TextMeshProUGUI>();
                 textComponent.text = textContent;
                 textComponent.fontSize = fontSize;
-                textComponent.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-                textComponent.alignment = TextAnchor.MiddleCenter;
+                textComponent.alignment = TextAlignmentOptions.Center;
                 
                 // Setup RectTransform
                 RectTransform rectTransform = textGO.GetComponent<RectTransform>();
@@ -611,6 +640,9 @@ namespace VibeUnity.Editor
                 Debug.Log($"[VibeUnityCLI]    └─ Size: {width}x{height}");
                 Debug.Log($"[VibeUnityCLI]    └─ Anchor: {anchorPreset}");
                 Debug.Log($"[VibeUnityCLI]    └─ Hierarchy: {GetGameObjectPath(textGO)}");
+                
+                // Save the scene after successful creation
+                SaveActiveScene();
                 return true;
             }
             catch (System.Exception e)
@@ -735,6 +767,9 @@ namespace VibeUnity.Editor
                 Debug.Log($"[VibeUnityCLI]    └─ Vertical: {vertical}");
                 Debug.Log($"[VibeUnityCLI]    └─ Anchor: {anchorPreset}");
                 Debug.Log($"[VibeUnityCLI]    └─ Hierarchy: {GetGameObjectPath(scrollViewGO)}");
+                
+                // Save the scene after successful creation
+                SaveActiveScene();
                 return true;
             }
             catch (System.Exception e)
@@ -932,14 +967,13 @@ namespace VibeUnity.Editor
         /// </summary>
         private static void CreateButtonText(GameObject buttonParent, string textContent)
         {
-            GameObject textGO = new GameObject("Text");
+            GameObject textGO = new GameObject("Text (TMP)");
             textGO.transform.SetParent(buttonParent.transform, false);
             
-            Text textComponent = textGO.AddComponent<Text>();
+            TextMeshProUGUI textComponent = textGO.AddComponent<TextMeshProUGUI>();
             textComponent.text = textContent;
-            textComponent.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             textComponent.fontSize = 14;
-            textComponent.alignment = TextAnchor.MiddleCenter;
+            textComponent.alignment = TextAlignmentOptions.Center;
             textComponent.color = Color.black;
             
             // Setup RectTransform to fill button
@@ -1441,6 +1475,8 @@ namespace VibeUnity.Editor
         {
             try
             {
+                // Set batch processing flag to optimize scene saving
+                _isBatchProcessing = true;
                 if (!System.IO.File.Exists(jsonFilePath))
                 {
                     Debug.LogError($"[VibeUnityCLI] Batch file not found: {jsonFilePath}");
@@ -1498,6 +1534,11 @@ namespace VibeUnity.Editor
                 Debug.LogError($"[VibeUnityCLI] Exception executing batch file: {e.Message}");
                 return false;
             }
+            finally
+            {
+                // Always reset batch processing flag
+                _isBatchProcessing = false;
+            }
         }
         
         /// <summary>
@@ -1510,6 +1551,8 @@ namespace VibeUnity.Editor
         {
             try
             {
+                // Set batch processing flag to optimize scene saving
+                _isBatchProcessing = true;
                 if (!System.IO.File.Exists(jsonFilePath))
                 {
                     string error = $"Batch file not found: {jsonFilePath}";
@@ -1622,6 +1665,11 @@ namespace VibeUnity.Editor
                 Debug.LogError($"[VibeUnityCLI] {error}");
                 return false;
             }
+            finally
+            {
+                // Always reset batch processing flag
+                _isBatchProcessing = false;
+            }
         }
         
         /// <summary>
@@ -1653,6 +1701,8 @@ namespace VibeUnity.Editor
                     return ExecuteAddCylinderCommand(command);
                 case "add-capsule":
                     return ExecuteAddCapsuleCommand(command);
+                case "add-component":
+                    return ExecuteAddComponentCommand(command);
                 default:
                     Debug.LogError($"[VibeUnityCLI] Unknown batch command: {command.action}");
                     return false;
@@ -1716,6 +1766,10 @@ namespace VibeUnity.Editor
                     case "add-capsule":
                         logCapture.AppendLine("Executing add-capsule command...");
                         result = ExecuteAddCapsuleCommandWithLogging(command, logCapture);
+                        break;
+                    case "add-component":
+                        logCapture.AppendLine("Executing add-component command...");
+                        result = ExecuteAddComponentCommandWithLogging(command, logCapture);
                         break;
                     default:
                         string error = $"Unknown batch command: {command.action}";
@@ -1868,7 +1922,7 @@ namespace VibeUnity.Editor
                     // Apply color if specified
                     if (!string.IsNullOrEmpty(command.color))
                     {
-                        Text textComponent = textGO.GetComponent<Text>();
+                        TextMeshProUGUI textComponent = textGO.GetComponent<TextMeshProUGUI>();
                         if (textComponent != null && ColorUtility.TryParseHtmlString(command.color, out Color color))
                         {
                             textComponent.color = color;
@@ -1957,6 +2011,62 @@ namespace VibeUnity.Editor
         }
         
         /// <summary>
+        /// Executes add-component batch command
+        /// </summary>
+        private static bool ExecuteAddComponentCommand(BatchCommand command)
+        {
+            try
+            {
+                string targetName = command.name;
+                string componentTypeName = command.componentType;
+                
+                if (string.IsNullOrEmpty(targetName))
+                {
+                    Debug.LogError($"[VibeUnityCLI] Target GameObject name is required for add-component command");
+                    return false;
+                }
+                
+                if (string.IsNullOrEmpty(componentTypeName))
+                {
+                    Debug.LogError($"[VibeUnityCLI] Component type is required for add-component command");
+                    return false;
+                }
+                
+                // Find the target GameObject
+                GameObject targetGO = FindGameObjectInActiveScene(targetName);
+                if (targetGO == null)
+                {
+                    Debug.LogError($"[VibeUnityCLI] GameObject '{targetName}' not found in active scene");
+                    return false;
+                }
+                
+                // Add the component
+                Component addedComponent = AddComponentToGameObject(targetGO, componentTypeName);
+                if (addedComponent == null)
+                {
+                    return false;
+                }
+                
+                // Set component parameters if provided
+                if (command.parameters != null && command.parameters.Length > 0)
+                {
+                    SetComponentParameters(addedComponent, command.parameters);
+                }
+                
+                Debug.Log($"[VibeUnityCLI] ✅ SUCCESS: Added component '{componentTypeName}' to '{targetName}'");
+                
+                // Save the scene after successful component addition
+                SaveActiveScene();
+                return true;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"[VibeUnityCLI] Exception adding component: {e.Message}");
+                return false;
+            }
+        }
+        
+        /// <summary>
         /// Generic method to execute primitive GameObject creation
         /// </summary>
         private static bool ExecutePrimitiveCommand(BatchCommand command, PrimitiveType primitiveType)
@@ -1993,6 +2103,10 @@ namespace VibeUnity.Editor
                 primitiveObject.transform.eulerAngles = rotation;
                 primitiveObject.transform.localScale = scale;
                 
+                Debug.Log($"[VibeUnityCLI] ✅ SUCCESS: Created {primitiveType} '{objectName}' at {position}");
+                
+                // Save the scene after successful creation
+                SaveActiveScene();
                 return true;
             }
             catch (System.Exception e)
@@ -2311,7 +2425,7 @@ namespace VibeUnity.Editor
                         // Apply color if specified
                         if (!string.IsNullOrEmpty(command.color))
                         {
-                            Text textComponent = textGO.GetComponent<Text>();
+                            TextMeshProUGUI textComponent = textGO.GetComponent<TextMeshProUGUI>();
                             if (textComponent != null && ColorUtility.TryParseHtmlString(command.color, out Color color))
                             {
                                 textComponent.color = color;
@@ -2445,6 +2559,76 @@ namespace VibeUnity.Editor
         private static bool ExecuteAddCapsuleCommandWithLogging(BatchCommand command, System.Text.StringBuilder logCapture)
         {
             return ExecutePrimitiveCommandWithLogging(command, logCapture, PrimitiveType.Capsule, "Capsule");
+        }
+        
+        /// <summary>
+        /// Executes add-component batch command with logging
+        /// </summary>
+        private static bool ExecuteAddComponentCommandWithLogging(BatchCommand command, System.Text.StringBuilder logCapture)
+        {
+            try
+            {
+                string targetName = command.name;
+                string componentTypeName = command.componentType;
+                
+                logCapture.AppendLine($"Target GameObject: {targetName}");
+                logCapture.AppendLine($"Component Type: {componentTypeName}");
+                
+                if (string.IsNullOrEmpty(targetName))
+                {
+                    logCapture.AppendLine($"❌ ERROR: Target GameObject name is required for add-component command");
+                    return false;
+                }
+                
+                if (string.IsNullOrEmpty(componentTypeName))
+                {
+                    logCapture.AppendLine($"❌ ERROR: Component type is required for add-component command");
+                    return false;
+                }
+                
+                // Find the target GameObject
+                GameObject targetGO = FindGameObjectInActiveScene(targetName);
+                if (targetGO == null)
+                {
+                    logCapture.AppendLine($"❌ ERROR: GameObject '{targetName}' not found in active scene");
+                    logCapture.AppendLine($"Available GameObjects: {ListAvailableGameObjects()}");
+                    return false;
+                }
+                
+                // Add the component
+                Component addedComponent = AddComponentToGameObject(targetGO, componentTypeName);
+                if (addedComponent == null)
+                {
+                    logCapture.AppendLine($"❌ ERROR: Failed to add component '{componentTypeName}'");
+                    return false;
+                }
+                
+                logCapture.AppendLine($"✅ Component '{componentTypeName}' added successfully");
+                
+                // Set component parameters if provided
+                if (command.parameters != null && command.parameters.Length > 0)
+                {
+                    logCapture.AppendLine($"Setting {command.parameters.Length} parameters...");
+                    bool parametersSet = SetComponentParameters(addedComponent, command.parameters, logCapture);
+                    if (parametersSet)
+                    {
+                        logCapture.AppendLine($"✅ All parameters set successfully");
+                    }
+                    else
+                    {
+                        logCapture.AppendLine($"⚠️ Warning: Some parameters may not have been set correctly");
+                    }
+                }
+                
+                logCapture.AppendLine($"✅ SUCCESS: Added component '{componentTypeName}' to '{targetName}'");
+                return true;
+            }
+            catch (System.Exception e)
+            {
+                logCapture.AppendLine($"❌ Exception adding component: {e.Message}");
+                logCapture.AppendLine($"Stack Trace: {e.StackTrace}");
+                return false;
+            }
         }
         
         /// <summary>
@@ -2831,6 +3015,271 @@ namespace VibeUnity.Editor
         {
             EditorApplication.update -= CheckForCommandFiles;
             Debug.Log("[VibeUnityCLI] File watcher disabled");
+        }
+        
+        #endregion
+        
+        #region Scene Management Helper Methods
+        
+        /// <summary>
+        /// Saves the currently active scene and refreshes the asset database
+        /// </summary>
+        /// <param name="suppressLog">Whether to suppress the success log message (useful for batch operations)</param>
+        /// <param name="forceSave">Whether to force save even during batch processing</param>
+        private static void SaveActiveScene(bool suppressLog = false, bool forceSave = false)
+        {
+            // Skip saving during batch operations unless forced
+            if (_isBatchProcessing && !forceSave)
+            {
+                return;
+            }
+            
+            try
+            {
+                UnityEditor.SceneManagement.EditorSceneManager.SaveOpenScenes();
+                AssetDatabase.Refresh();
+                if (!suppressLog)
+                    Debug.Log("[VibeUnityCLI] Scene saved successfully");
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning($"[VibeUnityCLI] Failed to save scene: {e.Message}");
+            }
+        }
+        
+        #endregion
+        
+        #region Component Management Helper Methods
+        
+        /// <summary>
+        /// Adds a component to a GameObject by type name
+        /// </summary>
+        private static Component AddComponentToGameObject(GameObject target, string componentTypeName)
+        {
+            try
+            {
+                // Handle common component type aliases
+                string normalizedTypeName = NormalizeComponentTypeName(componentTypeName);
+                
+                // Try to find the type by name
+                System.Type componentType = GetComponentTypeByName(normalizedTypeName);
+                if (componentType == null)
+                {
+                    Debug.LogError($"[VibeUnityCLI] Component type '{componentTypeName}' not found");
+                    return null;
+                }
+                
+                // Check if component already exists (for components that require uniqueness)
+                if (typeof(MonoBehaviour).IsAssignableFrom(componentType))
+                {
+                    Component existing = target.GetComponent(componentType);
+                    if (existing != null)
+                    {
+                        Debug.LogWarning($"[VibeUnityCLI] Component '{componentTypeName}' already exists on '{target.name}', using existing component");
+                        return existing;
+                    }
+                }
+                
+                // Add the component
+                Component newComponent = target.AddComponent(componentType);
+                Debug.Log($"[VibeUnityCLI] Added component '{componentTypeName}' to '{target.name}'");
+                return newComponent;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"[VibeUnityCLI] Exception adding component '{componentTypeName}': {e.Message}");
+                return null;
+            }
+        }
+        
+        /// <summary>
+        /// Normalizes component type names to handle common aliases
+        /// </summary>
+        private static string NormalizeComponentTypeName(string typeName)
+        {
+            // Handle common aliases
+            switch (typeName.ToLower())
+            {
+                case "scenecontroller":
+                case "scene_controller":
+                    return "SceneController";
+                case "rigidbody":
+                    return "Rigidbody";
+                case "collider":
+                    return "BoxCollider"; // Default to BoxCollider
+                case "boxcollider":
+                    return "BoxCollider";
+                case "spherecollider":
+                    return "SphereCollider";
+                case "meshcollider":
+                    return "MeshCollider";
+                case "audiosource":
+                    return "AudioSource";
+                case "camera":
+                    return "Camera";
+                case "light":
+                    return "Light";
+                default:
+                    return typeName;
+            }
+        }
+        
+        /// <summary>
+        /// Gets a component type by name, searching through Unity and custom assemblies
+        /// </summary>
+        private static System.Type GetComponentTypeByName(string typeName)
+        {
+            // First try Unity's built-in types
+            System.Type type = System.Type.GetType($"UnityEngine.{typeName}, UnityEngine");
+            if (type != null)
+                return type;
+            
+            // Try without namespace
+            type = System.Type.GetType(typeName);
+            if (type != null)
+                return type;
+            
+            // Search through all loaded assemblies
+            foreach (var assembly in System.AppDomain.CurrentDomain.GetAssemblies())
+            {
+                type = assembly.GetType(typeName);
+                if (type != null)
+                    return type;
+                    
+                // Also try with common namespaces
+                type = assembly.GetType($"UnityEngine.{typeName}");
+                if (type != null)
+                    return type;
+            }
+            
+            return null;
+        }
+        
+        /// <summary>
+        /// Sets parameters on a component using reflection
+        /// </summary>
+        private static bool SetComponentParameters(Component component, ComponentParameter[] parameters, System.Text.StringBuilder logCapture = null)
+        {
+            bool allSuccessful = true;
+            
+            foreach (var param in parameters)
+            {
+                try
+                {
+                    bool success = SetComponentParameter(component, param, logCapture);
+                    if (!success)
+                        allSuccessful = false;
+                }
+                catch (System.Exception e)
+                {
+                    string error = $"Exception setting parameter '{param.name}': {e.Message}";
+                    Debug.LogError($"[VibeUnityCLI] {error}");
+                    logCapture?.AppendLine($"❌ ERROR: {error}");
+                    allSuccessful = false;
+                }
+            }
+            
+            return allSuccessful;
+        }
+        
+        /// <summary>
+        /// Sets a single parameter on a component
+        /// </summary>
+        private static bool SetComponentParameter(Component component, ComponentParameter param, System.Text.StringBuilder logCapture = null)
+        {
+            System.Type componentType = component.GetType();
+            
+            // Try to find the field first
+            var field = componentType.GetField(param.name, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+            if (field != null)
+            {
+                object value = ConvertParameterValue(param.value, param.type, field.FieldType);
+                if (value != null)
+                {
+                    field.SetValue(component, value);
+                    logCapture?.AppendLine($"✅ Set field '{param.name}' = '{param.value}' ({param.type})");
+                    return true;
+                }
+            }
+            
+            // Try to find the property
+            var property = componentType.GetProperty(param.name, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+            if (property != null && property.CanWrite)
+            {
+                object value = ConvertParameterValue(param.value, param.type, property.PropertyType);
+                if (value != null)
+                {
+                    property.SetValue(component, value);
+                    logCapture?.AppendLine($"✅ Set property '{param.name}' = '{param.value}' ({param.type})");
+                    return true;
+                }
+            }
+            
+            string error = $"Field or property '{param.name}' not found on component '{componentType.Name}'";
+            Debug.LogWarning($"[VibeUnityCLI] {error}");
+            logCapture?.AppendLine($"⚠️ Warning: {error}");
+            return false;
+        }
+        
+        /// <summary>
+        /// Converts a string parameter value to the appropriate type
+        /// </summary>
+        private static object ConvertParameterValue(string value, string paramType, System.Type targetType)
+        {
+            try
+            {
+                // Handle null or empty values
+                if (string.IsNullOrEmpty(value))
+                    return null;
+                
+                // Handle GameObject references by name
+                if (paramType == "GameObject" || targetType == typeof(GameObject))
+                {
+                    GameObject go = FindGameObjectInActiveScene(value);
+                    if (go == null)
+                    {
+                        Debug.LogWarning($"[VibeUnityCLI] GameObject '{value}' not found for parameter assignment");
+                    }
+                    return go;
+                }
+                
+                // Handle Component references by finding GameObject and getting component
+                if (paramType == "Component" || typeof(Component).IsAssignableFrom(targetType))
+                {
+                    GameObject go = FindGameObjectInActiveScene(value);
+                    if (go != null)
+                    {
+                        Component comp = go.GetComponent(targetType);
+                        if (comp == null)
+                        {
+                            Debug.LogWarning($"[VibeUnityCLI] Component '{targetType.Name}' not found on GameObject '{value}'");
+                        }
+                        return comp;
+                    }
+                    return null;
+                }
+                
+                // Handle primitive types
+                switch (paramType.ToLower())
+                {
+                    case "string":
+                        return value;
+                    case "int":
+                        return int.Parse(value);
+                    case "float":
+                        return float.Parse(value);
+                    case "bool":
+                        return bool.Parse(value);
+                    default:
+                        // Try to convert using the target type
+                        return System.Convert.ChangeType(value, targetType);
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"[VibeUnityCLI] Failed to convert parameter value '{value}' to type '{paramType}': {e.Message}");
+                return null;
+            }
         }
         
         #endregion       
