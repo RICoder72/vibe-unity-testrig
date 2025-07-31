@@ -1,0 +1,72 @@
+=== Processing test-urp-scene.json ===
+Timestamp: 2025-07-31 14:03:03
+File Path: C:/repos/vibe-unity-testrig/Assets\..\.vibe-commands\test-urp-scene.json
+
+JSON Content:
+{
+  "version": "1.0",
+  "description": "Create a 3D URP scene with a cube",
+  "scene": {
+    "name": "TestURPScene",
+    "create": true,
+    "path": "Assets/Scenes",
+    "type": "DefaultGameObjects",
+    "addToBuild": false
+  },
+  "commands": [
+    {
+      "action": "add-cube",
+      "name": "TestCube"
+    }
+  ]
+}
+
+✅ JSON parsing successful
+✅ Batch file loaded: 1 commands
+Description: Create a 3D URP scene with a cube
+
+=== Scene Configuration Validation ===
+✅ Scene Name: 'TestURPScene'
+   └─ Create if missing: True
+   └─ Creation Path: Assets/Scenes
+   └─ Scene Type: DefaultGameObjects
+   └─ Add to Build: False
+
+=== Scene Processing ===
+Processing scene: 'TestURPScene'
+⚠️ Scene not found, creating as requested: TestURPScene
+   └─ Path: Assets/Scenes
+   └─ Type: DefaultGameObjects
+   └─ Add to Build: False
+✅ Scene created and loaded: TestURPScene
+   └─ Full Path: Assets/Scenes/TestURPScene.unity
+=== Command Execution (1 commands) ===
+--- Command 1/1: add-cube ---
+Command details: {
+    "action": "add-cube",
+    "name": "TestCube",
+    "path": "",
+    "type": "",
+    "addToBuild": false,
+    "scene": "",
+    "renderMode": "",
+    "referenceWidth": 0,
+    "referenceHeight": 0,
+    "scaleMode": "",
+    "sortingOrder": 0,
+    "worldPosition": [],
+    "parent": "",
+    "width": 0.0,
+    "height": 0.0,
+    "anchor": "",
+    "position": [],
+    "text": "",
+    "fontSize": 0,
+    "color": ""
+}
+❌ ERROR: Unknown batch command: add-cube
+❌ Command 1 failed: add-cube
+
+=== Processing Complete ===
+Result: FAILED
+End Time: 2025-07-31 14:03:03

@@ -1,0 +1,17 @@
+{
+  "version": "1.0",
+  "description": "Create a 3D URP scene with a cube",
+  "scene": {
+    "name": "TestURPScene",
+    "create": true,
+    "path": "Assets/Scenes",
+    "type": "DefaultGameObjects",
+    "addToBuild": false
+  },
+  "commands": [
+    {
+      "action": "add-cube",
+      "name": "TestCube"
+    }
+  ]
+}

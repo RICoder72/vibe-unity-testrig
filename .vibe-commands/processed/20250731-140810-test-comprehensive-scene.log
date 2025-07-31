@@ -1,0 +1,315 @@
+=== Processing test-comprehensive-scene.json ===
+Timestamp: 2025-07-31 14:08:10
+File Path: C:/repos/vibe-unity-testrig/Assets\..\.vibe-commands\test-comprehensive-scene.json
+
+JSON Content:
+{
+  "version": "1.0",
+  "description": "Create a comprehensive 3D scene with multiple objects",
+  "scene": {
+    "name": "ComprehensiveTestScene",
+    "create": true,
+    "path": "Assets/Scenes",
+    "type": "DefaultGameObjects",
+    "addToBuild": false
+  },
+  "commands": [
+    {
+      "action": "add-cube",
+      "name": "RedCube",
+      "position": [0, 0, 0],
+      "rotation": [0, 0, 0],
+      "scale": [1, 1, 1]
+    },
+    {
+      "action": "add-sphere",
+      "name": "BlueSphere",
+      "position": [3, 0, 0],
+      "rotation": [0, 0, 0],
+      "scale": [1.5, 1.5, 1.5]
+    },
+    {
+      "action": "add-cylinder",
+      "name": "GreenCylinder",
+      "position": [-3, 0, 0],
+      "rotation": [0, 0, 90],
+      "scale": [1, 2, 1]
+    },
+    {
+      "action": "add-plane",
+      "name": "FloorPlane",
+      "position": [0, -2, 0],
+      "rotation": [0, 0, 0],
+      "scale": [5, 1, 5]
+    },
+    {
+      "action": "add-capsule",
+      "name": "YellowCapsule",
+      "position": [0, 3, 0],
+      "rotation": [45, 0, 0],
+      "scale": [0.8, 1.5, 0.8]
+    }
+  ]
+}
+
+✅ JSON parsing successful
+✅ Batch file loaded: 5 commands
+Description: Create a comprehensive 3D scene with multiple objects
+
+=== Scene Configuration Validation ===
+✅ Scene Name: 'ComprehensiveTestScene'
+   └─ Create if missing: True
+   └─ Creation Path: Assets/Scenes
+   └─ Scene Type: DefaultGameObjects
+   └─ Add to Build: False
+
+=== Scene Processing ===
+Processing scene: 'ComprehensiveTestScene'
+⚠️ Scene not found, creating as requested: ComprehensiveTestScene
+   └─ Path: Assets/Scenes
+   └─ Type: DefaultGameObjects
+   └─ Add to Build: False
+✅ Scene created and loaded: ComprehensiveTestScene
+   └─ Full Path: Assets/Scenes/ComprehensiveTestScene.unity
+=== Command Execution (5 commands) ===
+--- Command 1/5: add-cube ---
+Command details: {
+    "action": "add-cube",
+    "name": "RedCube",
+    "path": "",
+    "type": "",
+    "addToBuild": false,
+    "scene": "",
+    "renderMode": "",
+    "referenceWidth": 0,
+    "referenceHeight": 0,
+    "scaleMode": "",
+    "sortingOrder": 0,
+    "worldPosition": [],
+    "parent": "",
+    "width": 0.0,
+    "height": 0.0,
+    "anchor": "",
+    "position": [
+        0.0,
+        0.0,
+        0.0
+    ],
+    "rotation": [
+        0.0,
+        0.0,
+        0.0
+    ],
+    "scale": [
+        1.0,
+        1.0,
+        1.0
+    ],
+    "text": "",
+    "fontSize": 0,
+    "color": ""
+}
+Executing add-cube command...
+Cube Name: RedCube
+Position: (0.00, 0.00, 0.00)
+Scale: (1.00, 1.00, 1.00)
+✅ Cube created successfully: RedCube
+   └─ Position: (0.00, 0.00, 0.00)
+   └─ Has Collider: True
+   └─ Has Renderer: True
+✅ Command 1 succeeded: add-cube
+
+--- Command 2/5: add-sphere ---
+Command details: {
+    "action": "add-sphere",
+    "name": "BlueSphere",
+    "path": "",
+    "type": "",
+    "addToBuild": false,
+    "scene": "",
+    "renderMode": "",
+    "referenceWidth": 0,
+    "referenceHeight": 0,
+    "scaleMode": "",
+    "sortingOrder": 0,
+    "worldPosition": [],
+    "parent": "",
+    "width": 0.0,
+    "height": 0.0,
+    "anchor": "",
+    "position": [
+        3.0,
+        0.0,
+        0.0
+    ],
+    "rotation": [
+        0.0,
+        0.0,
+        0.0
+    ],
+    "scale": [
+        1.5,
+        1.5,
+        1.5
+    ],
+    "text": "",
+    "fontSize": 0,
+    "color": ""
+}
+Executing add-sphere command...
+Sphere Name: BlueSphere
+Position: (3.00, 0.00, 0.00)
+Scale: (1.00, 1.00, 1.00)
+✅ Sphere created successfully: BlueSphere
+   └─ Position: (3.00, 0.00, 0.00)
+   └─ Has Collider: True
+   └─ Has Renderer: True
+✅ Command 2 succeeded: add-sphere
+
+--- Command 3/5: add-cylinder ---
+Command details: {
+    "action": "add-cylinder",
+    "name": "GreenCylinder",
+    "path": "",
+    "type": "",
+    "addToBuild": false,
+    "scene": "",
+    "renderMode": "",
+    "referenceWidth": 0,
+    "referenceHeight": 0,
+    "scaleMode": "",
+    "sortingOrder": 0,
+    "worldPosition": [],
+    "parent": "",
+    "width": 0.0,
+    "height": 0.0,
+    "anchor": "",
+    "position": [
+        -3.0,
+        0.0,
+        0.0
+    ],
+    "rotation": [
+        0.0,
+        0.0,
+        90.0
+    ],
+    "scale": [
+        1.0,
+        2.0,
+        1.0
+    ],
+    "text": "",
+    "fontSize": 0,
+    "color": ""
+}
+Executing add-cylinder command...
+Cylinder Name: GreenCylinder
+Position: (-3.00, 0.00, 0.00)
+Scale: (1.00, 1.00, 1.00)
+✅ Cylinder created successfully: GreenCylinder
+   └─ Position: (-3.00, 0.00, 0.00)
+   └─ Has Collider: True
+   └─ Has Renderer: True
+✅ Command 3 succeeded: add-cylinder
+
+--- Command 4/5: add-plane ---
+Command details: {
+    "action": "add-plane",
+    "name": "FloorPlane",
+    "path": "",
+    "type": "",
+    "addToBuild": false,
+    "scene": "",
+    "renderMode": "",
+    "referenceWidth": 0,
+    "referenceHeight": 0,
+    "scaleMode": "",
+    "sortingOrder": 0,
+    "worldPosition": [],
+    "parent": "",
+    "width": 0.0,
+    "height": 0.0,
+    "anchor": "",
+    "position": [
+        0.0,
+        -2.0,
+        0.0
+    ],
+    "rotation": [
+        0.0,
+        0.0,
+        0.0
+    ],
+    "scale": [
+        5.0,
+        1.0,
+        5.0
+    ],
+    "text": "",
+    "fontSize": 0,
+    "color": ""
+}
+Executing add-plane command...
+Plane Name: FloorPlane
+Position: (0.00, -2.00, 0.00)
+Scale: (1.00, 1.00, 1.00)
+✅ Plane created successfully: FloorPlane
+   └─ Position: (0.00, -2.00, 0.00)
+   └─ Has Collider: True
+   └─ Has Renderer: True
+✅ Command 4 succeeded: add-plane
+
+--- Command 5/5: add-capsule ---
+Command details: {
+    "action": "add-capsule",
+    "name": "YellowCapsule",
+    "path": "",
+    "type": "",
+    "addToBuild": false,
+    "scene": "",
+    "renderMode": "",
+    "referenceWidth": 0,
+    "referenceHeight": 0,
+    "scaleMode": "",
+    "sortingOrder": 0,
+    "worldPosition": [],
+    "parent": "",
+    "width": 0.0,
+    "height": 0.0,
+    "anchor": "",
+    "position": [
+        0.0,
+        3.0,
+        0.0
+    ],
+    "rotation": [
+        45.0,
+        0.0,
+        0.0
+    ],
+    "scale": [
+        0.800000011920929,
+        1.5,
+        0.800000011920929
+    ],
+    "text": "",
+    "fontSize": 0,
+    "color": ""
+}
+Executing add-capsule command...
+Capsule Name: YellowCapsule
+Position: (0.00, 3.00, 0.00)
+Scale: (1.00, 1.00, 1.00)
+✅ Capsule created successfully: YellowCapsule
+   └─ Position: (0.00, 3.00, 0.00)
+   └─ Has Collider: True
+   └─ Has Renderer: True
+✅ Command 5 succeeded: add-capsule
+
+Saving scenes and refreshing asset database...
+✅ Scenes saved and asset database refreshed
+
+=== Processing Complete ===
+Result: SUCCESS
+End Time: 2025-07-31 14:08:10

@@ -1,0 +1,48 @@
+{
+  "version": "1.0",
+  "description": "Create a comprehensive 3D scene with multiple objects",
+  "scene": {
+    "name": "ComprehensiveTestScene",
+    "create": true,
+    "path": "Assets/Scenes",
+    "type": "DefaultGameObjects",
+    "addToBuild": false
+  },
+  "commands": [
+    {
+      "action": "add-cube",
+      "name": "RedCube",
+      "position": [0, 0, 0],
+      "rotation": [0, 0, 0],
+      "scale": [1, 1, 1]
+    },
+    {
+      "action": "add-sphere",
+      "name": "BlueSphere",
+      "position": [3, 0, 0],
+      "rotation": [0, 0, 0],
+      "scale": [1.5, 1.5, 1.5]
+    },
+    {
+      "action": "add-cylinder",
+      "name": "GreenCylinder",
+      "position": [-3, 0, 0],
+      "rotation": [0, 0, 90],
+      "scale": [1, 2, 1]
+    },
+    {
+      "action": "add-plane",
+      "name": "FloorPlane",
+      "position": [0, -2, 0],
+      "rotation": [0, 0, 0],
+      "scale": [5, 1, 5]
+    },
+    {
+      "action": "add-capsule",
+      "name": "YellowCapsule",
+      "position": [0, 3, 0],
+      "rotation": [45, 0, 0],
+      "scale": [0.8, 1.5, 0.8]
+    }
+  ]
+}

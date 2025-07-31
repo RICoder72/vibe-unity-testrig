@@ -1,0 +1,129 @@
+{
+  "version": "1.0",
+  "description": "Create a cool main menu UI with panels, buttons, and text",
+  "scene": {
+    "name": "CoolMenuScene",
+    "create": true,
+    "path": "Assets/Scenes",
+    "type": "DefaultGameObjects",
+    "addToBuild": false
+  },
+  "commands": [
+    {
+      "action": "add-canvas",
+      "name": "MainMenuCanvas",
+      "renderMode": "ScreenSpaceOverlay",
+      "referenceWidth": 1920,
+      "referenceHeight": 1080,
+      "scaleMode": "ScaleWithScreenSize"
+    },
+    {
+      "action": "add-panel",
+      "name": "TitlePanel",
+      "parent": "MainMenuCanvas",
+      "width": 800,
+      "height": 200,
+      "anchor": "TopCenter",
+      "position": [0, -100],
+      "color": "#2C3E50"
+    },
+    {
+      "action": "add-text",
+      "name": "GameTitle",
+      "parent": "TitlePanel",
+      "text": "AWESOME GAME",
+      "fontSize": 48,
+      "color": "#ECF0F1",
+      "anchor": "MiddleCenter",
+      "position": [0, 0]
+    },
+    {
+      "action": "add-panel",
+      "name": "ButtonPanel",
+      "parent": "MainMenuCanvas",
+      "width": 400,
+      "height": 600,
+      "anchor": "MiddleCenter",
+      "position": [0, -50],
+      "color": "#34495E"
+    },
+    {
+      "action": "add-button",
+      "name": "PlayButton",
+      "parent": "ButtonPanel",
+      "text": "PLAY",
+      "width": 300,
+      "height": 80,
+      "fontSize": 24,
+      "color": "#27AE60",
+      "anchor": "TopCenter",
+      "position": [0, -80]
+    },
+    {
+      "action": "add-button",
+      "name": "OptionsButton",
+      "parent": "ButtonPanel",
+      "text": "OPTIONS",
+      "width": 300,
+      "height": 80,
+      "fontSize": 24,
+      "color": "#3498DB",
+      "anchor": "TopCenter",
+      "position": [0, -180]
+    },
+    {
+      "action": "add-button",
+      "name": "CreditsButton",
+      "parent": "ButtonPanel",
+      "text": "CREDITS",
+      "width": 300,
+      "height": 80,
+      "fontSize": 24,
+      "color": "#9B59B6",
+      "anchor": "TopCenter",
+      "position": [0, -280]
+    },
+    {
+      "action": "add-button",
+      "name": "QuitButton",
+      "parent": "ButtonPanel",
+      "text": "QUIT",
+      "width": 300,
+      "height": 80,
+      "fontSize": 24,
+      "color": "#E74C3C",
+      "anchor": "TopCenter",
+      "position": [0, -380]
+    },
+    {
+      "action": "add-panel",
+      "name": "FooterPanel",
+      "parent": "MainMenuCanvas",
+      "width": 600,
+      "height": 100,
+      "anchor": "BottomCenter",
+      "position": [0, 50],
+      "color": "#1ABC9C"
+    },
+    {
+      "action": "add-text",
+      "name": "VersionText",
+      "parent": "FooterPanel",
+      "text": "Version 1.0.0",
+      "fontSize": 18,
+      "color": "#FFFFFF",
+      "anchor": "MiddleLeft",
+      "position": [20, 0]
+    },
+    {
+      "action": "add-text",
+      "name": "CopyrightText",
+      "parent": "FooterPanel",
+      "text": "© 2024 Game Studio",
+      "fontSize": 18,
+      "color": "#FFFFFF",
+      "anchor": "MiddleRight",
+      "position": [-20, 0]
+    }
+  ]
+}
