@@ -1,0 +1,34 @@
+{
+    "name": "com.ricoder.vibeunity",
+    "version": "1.0.0",
+    "displayName": "Vibe Unity",
+    "description": "Command Line Interface tools for Unity development workflow automation. Provides scene creation, canvas management, and project analysis capabilities with WSL integration.",
+    "unity": "2022.3",
+    "unityRelease": "0f1",
+    "keywords": [
+        "cli",
+        "automation",
+        "scenes",
+        "canvas",
+        "workflow",
+        "development",
+        "tools",
+        "wsl",
+        "editor"
+    ],
+    "author": {
+        "name": "RICoder72",
+        "url": "https://github.com/RICoder72/vibe-unity"
+    },
+    "category": "Editor Extensions",
+    "type": "tool",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/RICoder72/vibe-unity.git"
+    },
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/RICoder72/vibe-unity/issues"
+    },
+    "homepage": "https://github.com/RICoder72/vibe-unity#readme"
+}
