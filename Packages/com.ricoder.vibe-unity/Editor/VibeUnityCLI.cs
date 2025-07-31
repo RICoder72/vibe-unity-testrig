@@ -405,8 +405,11 @@ namespace VibeUnity.Editor
                 Debug.Log($"[VibeUnityCLI]    └─ Components: Canvas, CanvasScaler, GraphicRaycaster");
                 Debug.Log($"[VibeUnityCLI]    └─ Hierarchy: {GetGameObjectPath(canvasGO)}");
                 
+                // Mark scene as dirty before saving
+                MarkActiveSceneDirty();
+                
                 // Save the scene after successful creation
-                SaveActiveScene();
+                SaveActiveScene(false, true); // Force save even during batch processing
                 return true;
             }
             catch (System.Exception e)
@@ -425,6 +428,9 @@ namespace VibeUnity.Editor
             eventSystemGO.AddComponent<UnityEngine.EventSystems.EventSystem>();
             eventSystemGO.AddComponent<UnityEngine.EventSystems.StandaloneInputModule>();
             Debug.Log("[VibeUnityCLI] Created EventSystem for UI interaction");
+            
+            // Mark scene as dirty after creating EventSystem
+            MarkActiveSceneDirty();
         }
         
         #endregion
@@ -488,8 +494,11 @@ namespace VibeUnity.Editor
                 Debug.Log($"[VibeUnityCLI]    └─ Anchor: {anchorPreset}");
                 Debug.Log($"[VibeUnityCLI]    └─ Hierarchy: {GetGameObjectPath(panelGO)}");
                 
+                // Mark scene as dirty before saving
+                MarkActiveSceneDirty();
+                
                 // Save the scene after successful creation
-                SaveActiveScene();
+                SaveActiveScene(false, true); // Force save even during batch processing
                 return true;
             }
             catch (System.Exception e)
@@ -565,8 +574,11 @@ namespace VibeUnity.Editor
                 Debug.Log($"[VibeUnityCLI]    └─ Anchor: {anchorPreset}");
                 Debug.Log($"[VibeUnityCLI]    └─ Hierarchy: {GetGameObjectPath(buttonGO)}");
                 
+                // Mark scene as dirty before saving
+                MarkActiveSceneDirty();
+                
                 // Save the scene after successful creation
-                SaveActiveScene();
+                SaveActiveScene(false, true); // Force save even during batch processing
                 return true;
             }
             catch (System.Exception e)
@@ -641,8 +653,11 @@ namespace VibeUnity.Editor
                 Debug.Log($"[VibeUnityCLI]    └─ Anchor: {anchorPreset}");
                 Debug.Log($"[VibeUnityCLI]    └─ Hierarchy: {GetGameObjectPath(textGO)}");
                 
+                // Mark scene as dirty before saving
+                MarkActiveSceneDirty();
+                
                 // Save the scene after successful creation
-                SaveActiveScene();
+                SaveActiveScene(false, true); // Force save even during batch processing
                 return true;
             }
             catch (System.Exception e)
@@ -768,8 +783,11 @@ namespace VibeUnity.Editor
                 Debug.Log($"[VibeUnityCLI]    └─ Anchor: {anchorPreset}");
                 Debug.Log($"[VibeUnityCLI]    └─ Hierarchy: {GetGameObjectPath(scrollViewGO)}");
                 
+                // Mark scene as dirty before saving
+                MarkActiveSceneDirty();
+                
                 // Save the scene after successful creation
-                SaveActiveScene();
+                SaveActiveScene(false, true); // Force save even during batch processing
                 return true;
             }
             catch (System.Exception e)
@@ -1524,6 +1542,9 @@ namespace VibeUnity.Editor
                 }
                 
                 // Save all scenes after batch execution
+                // Force save the active scene specifically
+                ForceSaveActiveScene();
+                // Also save any other open scenes
                 UnityEditor.SceneManagement.EditorSceneManager.SaveOpenScenes();
                 AssetDatabase.Refresh();
                 
@@ -1651,6 +1672,9 @@ namespace VibeUnity.Editor
                 
                 // Save all scenes after batch execution
                 logCapture.AppendLine("Saving scenes and refreshing asset database...");
+                // Force save the active scene specifically
+                ForceSaveActiveScene();
+                // Also save any other open scenes
                 UnityEditor.SceneManagement.EditorSceneManager.SaveOpenScenes();
                 AssetDatabase.Refresh();
                 logCapture.AppendLine("✅ Scenes saved and asset database refreshed");
@@ -2055,6 +2079,9 @@ namespace VibeUnity.Editor
                 
                 Debug.Log($"[VibeUnityCLI] ✅ SUCCESS: Added component '{componentTypeName}' to '{targetName}'");
                 
+                // Mark scene as dirty before saving
+                MarkActiveSceneDirty();
+                
                 // Save the scene after successful component addition
                 SaveActiveScene();
                 return true;
@@ -2105,8 +2132,11 @@ namespace VibeUnity.Editor
                 
                 Debug.Log($"[VibeUnityCLI] ✅ SUCCESS: Created {primitiveType} '{objectName}' at {position}");
                 
+                // Mark scene as dirty before saving
+                MarkActiveSceneDirty();
+                
                 // Save the scene after successful creation
-                SaveActiveScene();
+                SaveActiveScene(false, true); // Force save even during batch processing
                 return true;
             }
             catch (System.Exception e)
@@ -2665,6 +2695,9 @@ namespace VibeUnity.Editor
                 logCapture.AppendLine($"   └─ Has Collider: {primitiveObject.GetComponent<Collider>() != null}");
                 logCapture.AppendLine($"   └─ Has Renderer: {primitiveObject.GetComponent<Renderer>() != null}");
                 
+                // Mark scene as dirty to ensure changes are saved
+                MarkActiveSceneDirty();
+                
                 return true;
             }
             catch (System.Exception e)
@@ -3044,6 +3077,32 @@ namespace VibeUnity.Editor
             catch (System.Exception e)
             {
                 Debug.LogWarning($"[VibeUnityCLI] Failed to save scene: {e.Message}");
+            }
+        }
+        
+        /// <summary>
+        /// Marks the currently active scene as dirty to ensure changes are saved
+        /// </summary>
+        private static void MarkActiveSceneDirty()
+        {
+            Scene activeScene = SceneManager.GetActiveScene();
+            if (activeScene.IsValid())
+            {
+                EditorSceneManager.MarkSceneDirty(activeScene);
+            }
+        }
+        
+        /// <summary>
+        /// Force saves the currently active scene immediately
+        /// </summary>
+        private static void ForceSaveActiveScene()
+        {
+            Scene activeScene = SceneManager.GetActiveScene();
+            if (activeScene.IsValid() && !string.IsNullOrEmpty(activeScene.path))
+            {
+                EditorSceneManager.MarkSceneDirty(activeScene);
+                EditorSceneManager.SaveScene(activeScene, activeScene.path);
+                AssetDatabase.Refresh();
             }
         }
         
