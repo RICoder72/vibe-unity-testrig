@@ -64,7 +64,24 @@ Both repositories use SSH for authentication:
 - Test rig: `git@github.com:RICoder72/vibe-unity-testrig.git`
 - Package: `git@github.com:RICoder72/vibe-unity.git`
 
-# Vibe Unity Integration Guide (Auto-generated - v1.3.0)
+# Project Workflow Notes for Claude-Code
+
+## Important Instructions
+- Do NOT write to or create .meta files unless explicitly told to
+- When tasked with creating scenes using Vibe-Unity, immediately ask if you should "pause and ask to continue", stop what you are doing, or continue when you encounter issues
+
+## Commit and Push Workflow
+- When doing a commit/push, ask user if they want to update the ./vibe-unity project
+- If user says yes:
+  - Perform a pull into the ./vibe-unity project first
+  - Copy ALL project files (except .gitignore'd files) from current project to ./vibe-unity project
+  - Commit changes in ./vibe-unity project
+  - Push changes to ./vibe-unity project
+  - Note: Must be done from the current project path, cannot cd into the target path
+
+⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄VIBE-UNITY⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄
+
+# Vibe Unity Integration Guide (Auto-generated - v1.3.1)
 
 ## Quick Reference for Claude-Code
 
@@ -75,7 +92,11 @@ Both repositories use SSH for authentication:
 
 ### Essential Commands for Claude-Code
 ```bash
-# Manual testing workflow (recommended)
+# Compilation validation (for claude-code script changes)
+./claude-compile-check.sh                # Check compilation, return errors if found
+./claude-compile-check.sh --include-warnings  # Include warning details
+
+# Manual testing workflow (after compilation passes)
 Tools > Vibe Unity > Force Recompile    # Ensure code changes compiled
 Tools > Vibe Unity > Run Test File       # Process test-scene-creation.json
 Tools > Vibe Unity > Scene State > Export Current Scene
@@ -86,23 +107,44 @@ Tools > Vibe Unity > Scene State > Export Current Scene
 - **Test file**: `.vibe-commands/test-scene-creation.json`
 - **Supported actions**: create-scene, add-canvas, add-button, add-text, add-scrollview, add-cube, etc.
 
-### Current Component Support (v1.3.0)
+### CRITICAL: Scene Creation Verification for Claude-Code
+- **ALWAYS check log files** after creating a scene to verify success
+- **Log location**: `.vibe-commands/logs/` directory
+- **If scene creation fails**: STOP immediately and report the issue
+- **Look for**: "Scene created successfully" or error messages in logs
+- **Common issues**: Missing components, unsupported features, JSON syntax errors
+
+### Current Component Support (v1.3.1)
 - ✅ **UI**: Canvas, Button, Text, Image, ScrollView, TextMeshPro
 - ✅ **3D**: Cube, Sphere, Plane, Cylinder, Capsule, Camera, Light
 - ⚠️ **Partial**: Rigidbody, Colliders
 - ❌ **Missing**: ParticleSystem, custom scripts, animations
+
+### Compilation Validation for Claude-Code
+- **Script**: `./claude-compile-check.sh` (auto-installed with package)
+- **Purpose**: Validate Unity script changes without running tests
+- **Output**: Structured error/warning reports with file:line locations
+- **Exit Codes**: 0=success, 1=errors, 2=timeout, 3=script error
+- **Usage**: Run after making C# changes to verify compilation
 
 ### Development Workflow Status
 - **File Watcher**: ✅ ENABLED (automatic JSON processing)
 - **HTTP Server**: DISABLED
 - **CLI Commands**: DISABLED
 - **Manual Testing**: ✅ ACTIVE (Use Unity menu items)
+- **Claude Compile Check**: ✅ INSTALLED (automatic deployment)
+
+## Vibe-Unity Claude Instructions
+* Whenever you create or modify a script, use the vibe-unity .sh tools to compile.
+* Whenever you have Unity compile, check the compilation logs for errors and warnings. Errors need to be fixed by you, and warnings should be mentioned during summarization after work is completed.
+* Whenever you use vibe-unity to create or modify a scene, verify it was created properly by referring to the logs. Any parts of a scene that could not be created with Vibe-Unity should be mentioned during summarization after work is completed.
+* Do NOT write to or create .meta files unless explicitly told to.
+* Whenever you are tasked with something that will have you creating scenes using Vibe-Unity, immediately ask if you should "pause and ask to continue", stop what you are doing, or continue when you encounter issues creating those scenes.
 
 ## For Detailed Usage
 - **Full Documentation**: [Package README](./Packages/com.ricoder.vibe-unity/README.md)
 - **JSON Schema Examples**: [Package Test Files](./Packages/com.ricoder.vibe-unity/.vibe-commands/)
 - **Coverage Analysis**: Check latest report in `.vibe-commands/coverage-analysis/`
 
----
-*This section is automatically maintained by Vibe Unity v1.3.0*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^VIBE-UNITY^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

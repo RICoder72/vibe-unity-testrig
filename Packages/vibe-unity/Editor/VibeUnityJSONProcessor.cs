@@ -17,6 +17,7 @@ namespace VibeUnity.Editor
         public static bool ProcessBatchFileWithLogging(string jsonFilePath)
         {
             var logCapture = new StringBuilder();
+            bool overallSuccess = false;
             
             try
             {
@@ -126,6 +127,7 @@ namespace VibeUnity.Editor
                     logCapture.AppendLine("   └─ Batch processing completed successfully despite export issue");
                 }
                 
+                overallSuccess = true;
                 return true;
             }
             catch (System.Exception e)
@@ -134,12 +136,13 @@ namespace VibeUnity.Editor
                 logCapture.AppendLine($"❌ FATAL ERROR: {error}");
                 logCapture.AppendLine($"Stack Trace: {e.StackTrace}");
                 Debug.LogError($"[VibeUnity] {error}");
+                overallSuccess = false;
                 return false;
             }
             finally
             {
                 // Save the log file
-                SaveLogFile(jsonFilePath, logCapture);
+                SaveLogFile(jsonFilePath, logCapture, overallSuccess);
             }
         }
         
@@ -286,7 +289,8 @@ namespace VibeUnity.Editor
         {
             try
             {
-                string sceneName = command.name;
+                // Support both "sceneName" and "name" fields for backwards compatibility
+                string sceneName = !string.IsNullOrEmpty(command.sceneName) ? command.sceneName : command.name;
                 string scenePath = !string.IsNullOrEmpty(command.path) ? command.path : "Assets/Scenes";
                 string sceneType = !string.IsNullOrEmpty(command.type) ? command.type : "DefaultGameObjects";
                 bool addToBuild = command.addToBuild;
@@ -702,7 +706,7 @@ namespace VibeUnity.Editor
         /// <summary>
         /// Saves a log file for the batch processing
         /// </summary>
-        private static void SaveLogFile(string jsonFilePath, StringBuilder logCapture)
+        private static void SaveLogFile(string jsonFilePath, StringBuilder logCapture, bool success)
         {
             try
             {
@@ -720,7 +724,7 @@ namespace VibeUnity.Editor
                 // Save the log file
                 logCapture.AppendLine();
                 logCapture.AppendLine($"=== Processing Complete ===");
-                logCapture.AppendLine($"Result: SUCCESS");
+                logCapture.AppendLine($"Result: {(success ? "SUCCESS" : "FAILURE")}");
                 logCapture.AppendLine($"End Time: {System.DateTime.Now:yyyy-MM-dd HH:mm:ss}");
                 
                 File.WriteAllText(logFilePath, logCapture.ToString());
@@ -770,6 +774,7 @@ namespace VibeUnity.Editor
         public string name;
         
         // Scene creation fields
+        public string sceneName;  // Alternative field name for scene creation
         public string path;
         public string type;
         public bool addToBuild;
