@@ -1,0 +1,61 @@
+=== Processing test-scene-creation.json ===
+Timestamp: 2025-08-01 12:55:20
+File Path: C:\repos\vibe-unity-testrig\.vibe-commands\test-scene-creation.json
+
+JSON Content:
+{
+  "version": "1.0",
+  "description": "Test scene creation to verify threading fix",
+  "scene": {
+    "name": "TestThreadingFix",
+    "path": "Assets/Scenes",
+    "type": "DefaultGameObjects",
+    "create": true,
+    "addToBuild": false
+  },
+  "commands": [
+    {
+      "action": "add-canvas",
+      "name": "TestCanvas",
+      "renderMode": "ScreenSpaceOverlay",
+      "referenceWidth": 1920,
+      "referenceHeight": 1080,
+      "scaleMode": "ScaleWithScreenSize"
+    }
+  ]
+}
+
+✅ JSON parsing successful
+✅ Batch file loaded: 1 commands
+Description: Test scene creation to verify threading fix
+
+=== Scene Configuration Validation ===
+✅ Scene Name: 'TestThreadingFix'
+   └─ Create if missing: True
+   └─ Creation Path: Assets/Scenes
+   └─ Scene Type: DefaultGameObjects
+   └─ Add to Build: False
+
+=== Scene Processing ===
+Processing scene: 'TestThreadingFix'
+❌ Exception in EnsureSceneLoadedWithSceneConfig: GetAllRegisteredPackages can only be called from the main thread.
+Constructors and field initializers will be executed from the loading thread when loading a scene.
+Don't use this function in the constructor or field initializers, instead move initialization code to the Awake or Start function.
+Stack Trace:   at (wrapper managed-to-native) UnityEditor.PackageManager.PackageInfo.GetAllRegisteredPackages()
+  at UnityEditor.PackageManagerUtilityInternal.GetAllVisiblePackages (System.Boolean skipHiddenPackages) [0x0000e] in <c8f398a9ae5743e5aa98c2ecacd45ec4>:0 
+  at UnityEditor.AssetDatabase+<FindEverywhere>d__43`1[T].MoveNext () [0x0009a] in <c8f398a9ae5743e5aa98c2ecacd45ec4>:0 
+  at UnityEditor.AssetDatabase+<FindAllAssets>d__40.MoveNext () [0x00054] in <c8f398a9ae5743e5aa98c2ecacd45ec4>:0 
+  at System.Linq.Enumerable+SelectEnumerableIterator`2[TSource,TResult].MoveNext () [0x00029] in <1694fdfc064a4caa8acf869b5d3e239b>:0 
+  at System.Linq.Set`1[TElement].UnionWith (System.Collections.Generic.IEnumerable`1[T] other) [0x00018] in <1694fdfc064a4caa8acf869b5d3e239b>:0 
+  at System.Linq.Enumerable+DistinctIterator`1[TSource].FillSet () [0x0000b] in <1694fdfc064a4caa8acf869b5d3e239b>:0 
+  at System.Linq.Enumerable+DistinctIterator`1[TSource].ToArray () [0x00000] in <1694fdfc064a4caa8acf869b5d3e239b>:0 
+  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <1694fdfc064a4caa8acf869b5d3e239b>:0 
+  at UnityEditor.AssetDatabase.FindAssets (UnityEditor.SearchFilter searchFilter) [0x00030] in <c8f398a9ae5743e5aa98c2ecacd45ec4>:0 
+  at UnityEditor.AssetDatabase.FindAssets (System.String filter, System.String[] searchInFolders) [0x00009] in <c8f398a9ae5743e5aa98c2ecacd45ec4>:0 
+  at UnityEditor.AssetDatabase.FindAssets (System.String filter) [0x00001] in <c8f398a9ae5743e5aa98c2ecacd45ec4>:0 
+  at VibeUnity.Editor.VibeUnityScenes.FindSceneAsset (System.String sceneName) [0x0001e] in .\Packages\com.ricoder.vibe-unity\Editor\VibeUnityScenes.cs:169 
+  at VibeUnity.Editor.VibeUnityJSONProcessor.EnsureSceneLoadedWithSceneConfig (VibeUnity.Editor.SceneConfig sceneConfig, System.Text.StringBuilder logCapture) [0x000c3] in .\Packages\com.ricoder.vibe-unity\Editor\VibeUnityJSONProcessor.cs:152 
+
+=== Processing Complete ===
+Result: SUCCESS
+End Time: 2025-08-01 12:55:20

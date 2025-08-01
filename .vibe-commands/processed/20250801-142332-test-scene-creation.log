@@ -1,0 +1,147 @@
+=== Processing test-scene-creation.json ===
+Timestamp: 2025-08-01 14:23:31
+File Path: C:\repos\vibe-unity-testrig\.vibe-commands\test-scene-creation.json
+
+JSON Content:
+{
+  "version": "1.0",
+  "description": "Test scene creation with threading fix validation",
+  "scene": {
+    "name": "TestThreadingFix",
+    "path": "Assets/Scenes",
+    "type": "DefaultGameObjects",
+    "create": true,
+    "addToBuild": false
+  },
+  "commands": [
+    {
+      "action": "add-canvas",
+      "name": "TestCanvas",
+      "renderMode": "ScreenSpaceOverlay",
+      "referenceWidth": 1920,
+      "referenceHeight": 1080,
+      "scaleMode": "ScaleWithScreenSize"
+    },
+    {
+      "action": "add-button",
+      "name": "TestButton",
+      "parent": "TestCanvas",
+      "text": "Threading Fix Test",
+      "width": 200,
+      "height": 50,
+      "anchor": "MiddleCenter",
+      "position": [0, 0]
+    }
+  ]
+}
+
+✅ JSON parsing successful
+✅ Batch file loaded: 2 commands
+Description: Test scene creation with threading fix validation
+
+=== Scene Configuration Validation ===
+✅ Scene Name: 'TestThreadingFix'
+   └─ Create if missing: True
+   └─ Creation Path: Assets/Scenes
+   └─ Scene Type: DefaultGameObjects
+   └─ Add to Build: False
+
+=== Scene Processing ===
+Processing scene: 'TestThreadingFix'
+⚠️ Scene not found, creating as requested: TestThreadingFix
+   └─ Path: Assets/Scenes
+   └─ Type: DefaultGameObjects
+   └─ Add to Build: False
+✅ Scene created and loaded: TestThreadingFix
+   └─ Full Path: Assets/Scenes/TestThreadingFix.unity
+=== Command Execution (2 commands) ===
+--- Command 1/2: add-canvas ---
+Command details: {
+    "action": "add-canvas",
+    "name": "TestCanvas",
+    "path": "",
+    "type": "",
+    "addToBuild": false,
+    "scene": "",
+    "renderMode": "ScreenSpaceOverlay",
+    "referenceWidth": 1920,
+    "referenceHeight": 1080,
+    "scaleMode": "ScaleWithScreenSize",
+    "sortingOrder": 0,
+    "worldPosition": [],
+    "parent": "",
+    "width": 0.0,
+    "height": 0.0,
+    "anchor": "",
+    "position": [],
+    "rotation": [],
+    "scale": [],
+    "horizontal": true,
+    "vertical": true,
+    "scrollbarVisibility": "AutoHideAndExpandViewport",
+    "scrollSensitivity": 1.0,
+    "text": "",
+    "fontSize": 0,
+    "color": "",
+    "componentType": "",
+    "parameters": []
+}
+Executing add-canvas command...
+Canvas Name: TestCanvas
+Render Mode: ScreenSpaceOverlay
+Resolution: 1920x1080
+Scale Mode: ScaleWithScreenSize
+Sorting Order: 0
+✅ Canvas created successfully: TestCanvas
+✅ Command 1 succeeded: add-canvas
+
+--- Command 2/2: add-button ---
+Command details: {
+    "action": "add-button",
+    "name": "TestButton",
+    "path": "",
+    "type": "",
+    "addToBuild": false,
+    "scene": "",
+    "renderMode": "",
+    "referenceWidth": 0,
+    "referenceHeight": 0,
+    "scaleMode": "",
+    "sortingOrder": 0,
+    "worldPosition": [],
+    "parent": "TestCanvas",
+    "width": 200.0,
+    "height": 50.0,
+    "anchor": "MiddleCenter",
+    "position": [
+        0.0,
+        0.0
+    ],
+    "rotation": [],
+    "scale": [],
+    "horizontal": true,
+    "vertical": true,
+    "scrollbarVisibility": "AutoHideAndExpandViewport",
+    "scrollSensitivity": 1.0,
+    "text": "Threading Fix Test",
+    "fontSize": 0,
+    "color": "",
+    "componentType": "",
+    "parameters": []
+}
+Executing add-button command...
+Button Name: TestButton
+Parent: TestCanvas
+Text: Threading Fix Test
+Size: 200x50
+Anchor: MiddleCenter
+Applied position offset: (0.00, 0.00)
+✅ Button created successfully: TestButton
+✅ Command 2 succeeded: add-button
+
+Saving scenes and refreshing asset database...
+✅ Scenes saved and asset database refreshed
+
+=== Processing Complete ===
+Result: SUCCESS
+End Time: 2025-08-01 14:23:32
