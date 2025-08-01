@@ -50,3 +50,6 @@ sysinfo.txt
 
 # Crashlytics generated file
 crashlytics-build.properties
+
+# Vibe Unity command processing files (generated logs and artifacts)
+.vibe-commands/

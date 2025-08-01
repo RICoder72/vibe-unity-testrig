@@ -63,3 +63,46 @@ When making changes to the package in this test rig:
 Both repositories use SSH for authentication:
 - Test rig: `git@github.com:RICoder72/vibe-unity-testrig.git`
 - Package: `git@github.com:RICoder72/vibe-unity.git`
+
+# Vibe Unity Integration Guide (Auto-generated - v1.3.0)
+
+## Quick Reference for Claude-Code
+
+### Scene State System (Primary Integration Point)
+- **Scene Files**: `.state.json` alongside Unity scenes in `Assets/Scenes/`
+- **Coverage Reports**: `.vibe-commands/coverage-analysis/` - shows what components are supported
+- **Auto-generation**: State files created automatically on scene save and batch processing
+
+### Essential Commands for Claude-Code
+```bash
+# Manual testing workflow (recommended)
+Tools > Vibe Unity > Force Recompile    # Ensure code changes compiled
+Tools > Vibe Unity > Run Test File       # Process test-scene-creation.json
+Tools > Vibe Unity > Scene State > Export Current Scene
+```
+
+### Batch Processing (JSON-Driven Scene Creation)
+- **Drop JSON files** in `.vibe-commands/` for automatic processing
+- **Test file**: `.vibe-commands/test-scene-creation.json`
+- **Supported actions**: create-scene, add-canvas, add-button, add-text, add-scrollview, add-cube, etc.
+
+### Current Component Support (v1.3.0)
+- ✅ **UI**: Canvas, Button, Text, Image, ScrollView, TextMeshPro
+- ✅ **3D**: Cube, Sphere, Plane, Cylinder, Capsule, Camera, Light
+- ⚠️ **Partial**: Rigidbody, Colliders
+- ❌ **Missing**: ParticleSystem, custom scripts, animations
+
+### Development Workflow Status
+- **File Watcher**: ✅ ENABLED (automatic JSON processing)
+- **HTTP Server**: DISABLED
+- **CLI Commands**: DISABLED
+- **Manual Testing**: ✅ ACTIVE (Use Unity menu items)
+
+## For Detailed Usage
+- **Full Documentation**: [Package README](./Packages/com.ricoder.vibe-unity/README.md)
+- **JSON Schema Examples**: [Package Test Files](./Packages/com.ricoder.vibe-unity/.vibe-commands/)
+- **Coverage Analysis**: Check latest report in `.vibe-commands/coverage-analysis/`
+
+---
+*This section is automatically maintained by Vibe Unity v1.3.0*
+
