@@ -277,6 +277,8 @@ namespace VibeUnity.Editor
                     return ExecuteAddCapsuleCommandWithLogging(command, logCapture);
                 case "add-component":
                     return ExecuteAddComponentCommandWithLogging(command, logCapture);
+                case "add-gameobject":
+                    return ExecuteAddGameObjectCommandWithLogging(command, logCapture);
                 default:
                     logCapture.AppendLine($"❌ ERROR: Unknown batch command: {command.action}");
                     return false;
@@ -701,6 +703,75 @@ namespace VibeUnity.Editor
             }
         }
         
+        private static bool ExecuteAddGameObjectCommandWithLogging(BatchCommand command, StringBuilder logCapture)
+        {
+            try
+            {
+                string objectName = command.name;
+                string parentName = command.parent;
+                
+                logCapture.AppendLine($"Executing add-gameobject command...");
+                logCapture.AppendLine($"GameObject Name: {objectName}");
+                logCapture.AppendLine($"Parent: {(!string.IsNullOrEmpty(parentName) ? parentName : "Scene Root")}");
+                
+                GameObject parentObject = null;
+                if (!string.IsNullOrEmpty(parentName))
+                {
+                    parentObject = VibeUnityGameObjects.FindInActiveScene(parentName);
+                    if (parentObject == null)
+                    {
+                        logCapture.AppendLine($"❌ Parent GameObject '{parentName}' not found in active scene");
+                        return false;
+                    }
+                }
+                
+                GameObject gameObject = VibeUnityGameObjects.CreateEmptyGameObject(objectName, parentObject);
+                if (gameObject == null)
+                {
+                    logCapture.AppendLine($"❌ Failed to create GameObject '{objectName}'");
+                    return false;
+                }
+                
+                // Set position if provided
+                if (command.position != null && command.position.Length >= 3)
+                {
+                    Vector3 position = new Vector3(command.position[0], command.position[1], command.position[2]);
+                    gameObject.transform.position = position;
+                    logCapture.AppendLine($"   └─ Position set to: ({position.x}, {position.y}, {position.z})");
+                }
+                
+                // Set rotation if provided
+                if (command.rotation != null && command.rotation.Length >= 3)
+                {
+                    Vector3 rotation = new Vector3(command.rotation[0], command.rotation[1], command.rotation[2]);
+                    gameObject.transform.eulerAngles = rotation;
+                    logCapture.AppendLine($"   └─ Rotation set to: ({rotation.x}, {rotation.y}, {rotation.z})");
+                }
+                
+                // Set scale if provided
+                if (command.scale != null && command.scale.Length >= 3)
+                {
+                    Vector3 scale = new Vector3(command.scale[0], command.scale[1], command.scale[2]);
+                    gameObject.transform.localScale = scale;
+                    logCapture.AppendLine($"   └─ Scale set to: ({scale.x}, {scale.y}, {scale.z})");
+                }
+                
+                logCapture.AppendLine($"✅ GameObject '{objectName}' created successfully");
+                if (parentObject != null)
+                {
+                    logCapture.AppendLine($"   └─ Parented to: {parentName}");
+                }
+                
+                return true;
+            }
+            catch (System.Exception e)
+            {
+                logCapture.AppendLine($"❌ Exception in add-gameobject: {e.Message}");
+                logCapture.AppendLine($"Stack Trace: {e.StackTrace}");
+                return false;
+            }
+        }
+        
         #endregion
         
         /// <summary>
@@ -810,7 +881,7 @@ namespace VibeUnity.Editor
         
         // Component specific
         public string componentType;
-        public ComponentParameter[] parameters;
+        public VibeUnityGameObjects.ComponentParameter[] parameters;
     }
     
     #endregion

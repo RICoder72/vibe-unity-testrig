@@ -1,0 +1,341 @@
+{
+    "version": "1.0",
+    "metadata": {
+        "sceneName": "SampleScene",
+        "scenePath": "Assets/Scenes/SampleScene.unity",
+        "unityVersion": "",
+        "exportedBy": "VibeUnity-Minimal",
+        "exportTimestamp": "2025-08-01 20:28:26",
+        "totalGameObjects": 0,
+        "totalComponents": 0,
+        "renderPipelines": []
+    },
+    "settings": {
+        "lighting": {
+            "realtimeGI": false,
+            "bakedGI": false,
+            "ambientColor": [],
+            "ambientMode": "",
+            "skyboxTint": [],
+            "ambientIntensity": 0.0
+        },
+        "render": {
+            "fog": false,
+            "fogColor": [],
+            "fogMode": "",
+            "fogDensity": 0.0,
+            "fogStartDistance": 0.0,
+            "fogEndDistance": 0.0,
+            "skyboxMaterial": ""
+        },
+        "physics": {
+            "gravity": [],
+            "defaultMaterial": "",
+            "bounceThreshold": 0.0,
+            "defaultSolverIterations": 0,
+            "defaultSolverVelocityIterations": 0
+        },
+        "audio": {
+            "volume": 0.0,
+            "dopplerFactor": 0.0,
+            "speedOfSound": 0.0
+        }
+    },
+    "gameObjects": [
+        {
+            "name": "Main Camera",
+            "hierarchyPath": "Main Camera",
+            "instanceId": 0,
+            "isActive": true,
+            "tag": "",
+            "layer": 0,
+            "isStatic": false,
+            "parentPath": "",
+            "childrenPaths": [],
+            "siblingIndex": 0,
+            "transform": {
+                "localPosition": [],
+                "localRotation": [],
+                "localScale": [],
+                "worldPosition": [],
+                "worldRotation": [],
+                "worldScale": []
+            },
+            "components": [],
+            "uiInfo": {
+                "rectTransform": {
+                    "anchoredPosition": [],
+                    "anchorMin": [],
+                    "anchorMax": [],
+                    "offsetMin": [],
+                    "offsetMax": [],
+                    "pivot": [],
+                    "sizeDelta": []
+                },
+                "canvas": {
+                    "renderMode": "",
+                    "worldCamera": [],
+                    "planeDistance": 0.0,
+                    "sortingOrder": 0,
+                    "sortingLayerName": "",
+                    "overrideSorting": false,
+                    "scaleFactor": 0.0,
+                    "referenceResolution": [],
+                    "scaleMode": "",
+                    "matchWidthOrHeight": 0.0
+                },
+                "canvasGroup": "",
+                "layoutElement": {
+                    "ignoreLayout": false,
+                    "minWidth": 0.0,
+                    "minHeight": 0.0,
+                    "preferredWidth": 0.0,
+                    "preferredHeight": 0.0,
+                    "flexibleWidth": 0.0,
+                    "flexibleHeight": 0.0,
+                    "layoutPriority": 0
+                },
+                "graphic": {
+                    "graphicType": "",
+                    "color": [],
+                    "material": "",
+                    "raycastTarget": false,
+                    "sprite": "",
+                    "imageType": "",
+                    "preserveAspect": false,
+                    "text": "",
+                    "font": "",
+                    "fontSize": 0,
+                    "fontStyle": "",
+                    "alignment": "",
+                    "richText": false
+                }
+            }
+        },
+        {
+            "name": "Directional Light",
+            "hierarchyPath": "Directional Light",
+            "instanceId": 0,
+            "isActive": true,
+            "tag": "",
+            "layer": 0,
+            "isStatic": false,
+            "parentPath": "",
+            "childrenPaths": [],
+            "siblingIndex": 0,
+            "transform": {
+                "localPosition": [],
+                "localRotation": [],
+                "localScale": [],
+                "worldPosition": [],
+                "worldRotation": [],
+                "worldScale": []
+            },
+            "components": [],
+            "uiInfo": {
+                "rectTransform": {
+                    "anchoredPosition": [],
+                    "anchorMin": [],
+                    "anchorMax": [],
+                    "offsetMin": [],
+                    "offsetMax": [],
+                    "pivot": [],
+                    "sizeDelta": []
+                },
+                "canvas": {
+                    "renderMode": "",
+                    "worldCamera": [],
+                    "planeDistance": 0.0,
+                    "sortingOrder": 0,
+                    "sortingLayerName": "",
+                    "overrideSorting": false,
+                    "scaleFactor": 0.0,
+                    "referenceResolution": [],
+                    "scaleMode": "",
+                    "matchWidthOrHeight": 0.0
+                },
+                "canvasGroup": "",
+                "layoutElement": {
+                    "ignoreLayout": false,
+                    "minWidth": 0.0,
+                    "minHeight": 0.0,
+                    "preferredWidth": 0.0,
+                    "preferredHeight": 0.0,
+                    "flexibleWidth": 0.0,
+                    "flexibleHeight": 0.0,
+                    "layoutPriority": 0
+                },
+                "graphic": {
+                    "graphicType": "",
+                    "color": [],
+                    "material": "",
+                    "raycastTarget": false,
+                    "sprite": "",
+                    "imageType": "",
+                    "preserveAspect": false,
+                    "text": "",
+                    "font": "",
+                    "fontSize": 0,
+                    "fontStyle": "",
+                    "alignment": "",
+                    "richText": false
+                }
+            }
+        },
+        {
+            "name": "Global Volume",
+            "hierarchyPath": "Global Volume",
+            "instanceId": 0,
+            "isActive": true,
+            "tag": "",
+            "layer": 0,
+            "isStatic": false,
+            "parentPath": "",
+            "childrenPaths": [],
+            "siblingIndex": 0,
+            "transform": {
+                "localPosition": [],
+                "localRotation": [],
+                "localScale": [],
+                "worldPosition": [],
+                "worldRotation": [],
+                "worldScale": []
+            },
+            "components": [],
+            "uiInfo": {
+                "rectTransform": {
+                    "anchoredPosition": [],
+                    "anchorMin": [],
+                    "anchorMax": [],
+                    "offsetMin": [],
+                    "offsetMax": [],
+                    "pivot": [],
+                    "sizeDelta": []
+                },
+                "canvas": {
+                    "renderMode": "",
+                    "worldCamera": [],
+                    "planeDistance": 0.0,
+                    "sortingOrder": 0,
+                    "sortingLayerName": "",
+                    "overrideSorting": false,
+                    "scaleFactor": 0.0,
+                    "referenceResolution": [],
+                    "scaleMode": "",
+                    "matchWidthOrHeight": 0.0
+                },
+                "canvasGroup": "",
+                "layoutElement": {
+                    "ignoreLayout": false,
+                    "minWidth": 0.0,
+                    "minHeight": 0.0,
+                    "preferredWidth": 0.0,
+                    "preferredHeight": 0.0,
+                    "flexibleWidth": 0.0,
+                    "flexibleHeight": 0.0,
+                    "layoutPriority": 0
+                },
+                "graphic": {
+                    "graphicType": "",
+                    "color": [],
+                    "material": "",
+                    "raycastTarget": false,
+                    "sprite": "",
+                    "imageType": "",
+                    "preserveAspect": false,
+                    "text": "",
+                    "font": "",
+                    "fontSize": 0,
+                    "fontStyle": "",
+                    "alignment": "",
+                    "richText": false
+                }
+            }
+        },
+        {
+            "name": "TestCube",
+            "hierarchyPath": "TestCube",
+            "instanceId": 0,
+            "isActive": true,
+            "tag": "",
+            "layer": 0,
+            "isStatic": false,
+            "parentPath": "",
+            "childrenPaths": [],
+            "siblingIndex": 0,
+            "transform": {
+                "localPosition": [],
+                "localRotation": [],
+                "localScale": [],
+                "worldPosition": [],
+                "worldRotation": [],
+                "worldScale": []
+            },
+            "components": [],
+            "uiInfo": {
+                "rectTransform": {
+                    "anchoredPosition": [],
+                    "anchorMin": [],
+                    "anchorMax": [],
+                    "offsetMin": [],
+                    "offsetMax": [],
+                    "pivot": [],
+                    "sizeDelta": []
+                },
+                "canvas": {
+                    "renderMode": "",
+                    "worldCamera": [],
+                    "planeDistance": 0.0,
+                    "sortingOrder": 0,
+                    "sortingLayerName": "",
+                    "overrideSorting": false,
+                    "scaleFactor": 0.0,
+                    "referenceResolution": [],
+                    "scaleMode": "",
+                    "matchWidthOrHeight": 0.0
+                },
+                "canvasGroup": "",
+                "layoutElement": {
+                    "ignoreLayout": false,
+                    "minWidth": 0.0,
+                    "minHeight": 0.0,
+                    "preferredWidth": 0.0,
+                    "preferredHeight": 0.0,
+                    "flexibleWidth": 0.0,
+                    "flexibleHeight": 0.0,
+                    "layoutPriority": 0
+                },
+                "graphic": {
+                    "graphicType": "",
+                    "color": [],
+                    "material": "",
+                    "raycastTarget": false,
+                    "sprite": "",
+                    "imageType": "",
+                    "preserveAspect": false,
+                    "text": "",
+                    "font": "",
+                    "fontSize": 0,
+                    "fontStyle": "",
+                    "alignment": "",
+                    "richText": false
+                }
+            }
+        }
+    ],
+    "assetReferences": [],
+    "coverageReport": {
+        "summary": {
+            "totalGameObjects": 0,
+            "totalComponents": 0,
+            "supportedComponents": 0,
+            "partiallySupported": 0,
+            "unsupportedComponents": 0,
+            "coveragePercentage": 0.0,
+            "canFullyRebuild": false
+        },
+        "componentCoverage": [],
+        "gaps": [],
+        "recommendations": []
+    }
+}

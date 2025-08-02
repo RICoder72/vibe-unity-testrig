@@ -3,26 +3,27 @@ using UnityEngine.UI;
 
 public class HelloNastyController : MonoBehaviour
 {
-    [SerializeField] private Button helloButton;
-    
+    [SerializeField] private Button helloNastyButton;
+
     void Start()
     {
-        if (helloButton == null)
+        if (helloNastyButton == null)
         {
-            helloButton = GameObject.Find("HelloButton")?.GetComponent<Button>();
+            helloNastyButton = GameObject.Find("HelloNastyButton")?.GetComponent<Button>();
         }
-        
-        if (helloButton != null)
+
+        if (helloNastyButton != null)
         {
-            helloButton.onClick.AddListener(OnHelloButtonClicked);
+            helloNastyButton.onClick.AddListener(OnHelloNastyButtonClicked);
+            Debug.Log("HelloNastyController: Button wired up successfully!");
         }
         else
         {
-            Debug.LogError("HelloButton not found!");
+            Debug.LogError("HelloNastyController: HelloNastyButton not found! Make sure the button exists in the scene.");
         }
     }
-    
-    private void OnHelloButtonClicked()
+
+    public void OnHelloNastyButtonClicked()
     {
         Debug.Log("Hello Nasty!");
     }

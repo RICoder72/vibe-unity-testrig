@@ -1,13 +1,20 @@
 using UnityEngine;
 
-[UnityEditor.InitializeOnLoadAttribute]
+#if UNITY_EDITOR
+using UnityEditor;
+
+[InitializeOnLoad]
 public class AutomaticHelloNasty
 {
     static AutomaticHelloNasty()
     {
-        UnityEditor.EditorApplication.delayCall += () =>
-        {
-            Debug.Log("Hello Nasty!");
-        };
+        EditorApplication.delayCall += RunTest;
+    }
+
+    private static void RunTest()
+    {
+        EditorApplication.delayCall -= RunTest;
+        Debug.Log("Hello Nasty!");
     }
 }
+#endif
