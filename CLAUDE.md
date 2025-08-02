@@ -81,7 +81,7 @@ Both repositories use SSH for authentication:
 
 ⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄VIBE-UNITY⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄
 
-# Vibe Unity Integration Guide (Auto-generated - v1.3.1)
+# Vibe Unity Integration Guide (Auto-generated - v1.4.0)
 
 ## Quick Reference for Claude-Code
 
@@ -114,7 +114,7 @@ Tools > Vibe Unity > Scene State > Export Current Scene
 - **Look for**: "Scene created successfully" or error messages in logs
 - **Common issues**: Missing components, unsupported features, JSON syntax errors
 
-### Current Component Support (v1.3.1)
+### Current Component Support (v1.4.0)
 - ✅ **UI**: Canvas, Button, Text, Image, ScrollView, TextMeshPro
 - ✅ **3D**: Cube, Sphere, Plane, Cylinder, Capsule, Camera, Light
 - ⚠️ **Partial**: Rigidbody, Colliders
@@ -147,4 +147,5 @@ Tools > Vibe Unity > Scene State > Export Current Scene
 - **Coverage Analysis**: Check latest report in `.vibe-commands/coverage-analysis/`
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^VIBE-UNITY^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 

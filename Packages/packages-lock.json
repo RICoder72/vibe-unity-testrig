@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.ricoder.vibe-unity": {
-      "version": "file:vibe-unity",
+      "version": "file:com.ricoder.vibe-unity",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
