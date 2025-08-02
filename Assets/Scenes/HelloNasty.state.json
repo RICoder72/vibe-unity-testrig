@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "sceneName": "HelloNasty",
-  "exportTimestamp": "2025-08-01 20:54:28",
+  "exportTimestamp": "2025-08-01 21:38:46",
   "gameObjects": [
     {
       "name": "Main Camera",
@@ -22,36 +22,36 @@
         "UniversalAdditionalLightData"
       ]    },
     {
-      "name": "UI Canvas",
-      "path": "UI Canvas",
+      "name": "Canvas",
+      "path": "Canvas",
       "active": true,
       "position": [437.000, 259.000, 0.000],
       "rotation": [0.000, 0.000, 0.000],
-      "scale": [0.467, 0.467, 0.467],
+      "scale": [1.000, 1.000, 1.000],
       "scripts": [
         "CanvasScaler",
         "GraphicRaycaster"
       ]    },
     {
-      "name": "HelloNastyButton",
-      "path": "UI Canvas/HelloNastyButton",
+      "name": "PushMeButton",
+      "path": "Canvas/PushMeButton",
       "active": true,
       "position": [0.000, 0.000, 0.000],
       "rotation": [0.000, 0.000, 0.000],
       "scale": [1.000, 1.000, 1.000],
-      "text": "Say Hello Nasty!",
+      "text": "Push Me",
       "scripts": [
         "Image",
         "Button"
       ]    },
     {
       "name": "Text (TMP)",
-      "path": "UI Canvas/HelloNastyButton/Text (TMP)",
+      "path": "Canvas/PushMeButton/Text (TMP)",
       "active": true,
       "position": [0.000, 0.000, 0.000],
       "rotation": [0.000, 0.000, 0.000],
       "scale": [1.000, 1.000, 1.000],
-      "text": "Say Hello Nasty!",
+      "text": "Push Me",
       "scripts": [
         "TextMeshProUGUI"
       ]    },
@@ -65,64 +65,6 @@
       "scripts": [
         "EventSystem",
         "StandaloneInputModule"
-      ]    },
-    {
-      "name": "SceneController",
-      "path": "SceneController",
-      "active": true,
-      "position": [0.000, 0.000, 0.000],
-      "rotation": [0.000, 0.000, 0.000],
-      "scale": [1.000, 1.000, 1.000],
-      "scripts": [
-        "HelloNastyController"
-      ]    },
-    {
-      "name": "TempCube",
-      "path": "TempCube",
-      "active": true,
-      "position": [100.000, 100.000, 100.000],
-      "rotation": [0.000, 0.000, 0.000],
-      "scale": [1.000, 1.000, 1.000]
-    },
-    {
-      "name": "TestCube2",
-      "path": "TestCube2",
-      "active": true,
-      "position": [2.000, 1.000, 0.000],
-      "rotation": [0.000, 0.000, 0.000],
-      "scale": [1.000, 1.000, 1.000]
-    },
-    {
-      "name": "FinalTestCube",
-      "path": "FinalTestCube",
-      "active": true,
-      "position": [5.000, 1.000, 0.000],
-      "rotation": [0.000, 0.000, 0.000],
-      "scale": [1.000, 1.000, 1.000]
-    },
-    {
-      "name": "ManualTestCube",
-      "path": "ManualTestCube",
-      "active": true,
-      "position": [10.000, 1.000, 0.000],
-      "rotation": [0.000, 0.000, 0.000],
-      "scale": [1.000, 1.000, 1.000]
-    },
-    {
-      "name": "BalancedTestCube",
-      "path": "BalancedTestCube",
-      "active": true,
-      "position": [15.000, 2.000, 0.000],
-      "rotation": [0.000, 0.000, 0.000],
-      "scale": [1.000, 1.000, 1.000]
-    },
-    {
-      "name": "EnhancedTestCube",
-      "path": "EnhancedTestCube",
-      "active": true,
-      "position": [20.000, 2.000, 0.000],
-      "rotation": [0.000, 0.000, 0.000],
-      "scale": [1.000, 1.000, 1.000]
-    }
+      ]    }
   ]
 }

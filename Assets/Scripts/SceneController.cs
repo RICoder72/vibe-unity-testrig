@@ -3,31 +3,18 @@ using UnityEngine.UI;
 
 public class SceneController : MonoBehaviour
 {
-    private Button helloButton;
-
+    [SerializeField] private Button pushMeButton;
+    
     void Start()
     {
-        GameObject buttonObject = GameObject.Find("HelloButton");
-        if (buttonObject != null)
+        if (pushMeButton != null)
         {
-            helloButton = buttonObject.GetComponent<Button>();
-            if (helloButton != null)
-            {
-                helloButton.onClick.AddListener(OnHelloButtonClicked);
-            }
-            else
-            {
-                Debug.LogError("HelloButton GameObject found but Button component missing!");
-            }
-        }
-        else
-        {
-            Debug.LogError("HelloButton GameObject not found!");
+            pushMeButton.onClick.AddListener(OnPushMeButtonClicked);
         }
     }
-
-    void OnHelloButtonClicked()
+    
+    void OnPushMeButtonClicked()
     {
-        Debug.Log("Hello Nasty!");
+        Debug.Log("Push Me button was clicked!");
     }
 }
