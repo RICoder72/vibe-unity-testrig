@@ -81,65 +81,84 @@ Both repositories use SSH for authentication:
 
 ⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄VIBE-UNITY⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄
 
-# Vibe Unity Integration Guide (Auto-generated - v1.4.0)
+# Vibe Unity Integration Guide (Auto-generated - v1.4.2)
 
-## Quick Reference for Claude-Code
+## Claude-Code Automated Workflow
 
-### Scene State System (Primary Integration Point)
-- **Scene Files**: `.state.json` alongside Unity scenes in `Assets/Scenes/`
-- **Coverage Reports**: `.vibe-commands/coverage-analysis/` - shows what components are supported
-- **Auto-generation**: State files created automatically on scene save and batch processing
-
-### Essential Commands for Claude-Code
+### Primary Development Pattern
 ```bash
-# Compilation validation (for claude-code script changes)
-./claude-compile-check.sh                # Check compilation, return errors if found
-./claude-compile-check.sh --include-warnings  # Include warning details
+# 1. Validate compilation after code changes
+./claude-compile-check.sh
+# Exit codes: 0=success, 1=errors, 2=timeout, 3=script error
 
-# Manual testing workflow (after compilation passes)
-Tools > Vibe Unity > Force Recompile    # Ensure code changes compiled
-Tools > Vibe Unity > Run Test File       # Process test-scene-creation.json
-Tools > Vibe Unity > Scene State > Export Current Scene
+# 2. Create scenes via JSON (automatic processing)
+echo '{"action":"create-scene","name":"TestScene","path":"Assets/Scenes"}' > .vibe-commands/test.json
+
+# 3. Verify results (check logs after 3 seconds)
+sleep 3 && cat .vibe-commands/logs/latest.log
 ```
 
-### Batch Processing (JSON-Driven Scene Creation)
-- **Drop JSON files** in `.vibe-commands/` for automatic processing
-- **Test file**: `.vibe-commands/test-scene-creation.json`
-- **Supported actions**: create-scene, add-canvas, add-button, add-text, add-scrollview, add-cube, etc.
+### Automated Success/Failure Detection
+- ✅ **Success Indicators**: Log contains "Scene created successfully" or "STATUS: SUCCESS"
+- ❌ **Failure Indicators**: Log contains "ERROR", "FAILED", or compilation errors
+- 🔄 **Claude Action**: On failure, immediately report specific error and stop workflow
 
-### CRITICAL: Scene Creation Verification for Claude-Code
-- **ALWAYS check log files** after creating a scene to verify success
-- **Log location**: `.vibe-commands/logs/` directory
-- **If scene creation fails**: STOP immediately and report the issue
-- **Look for**: "Scene created successfully" or error messages in logs
-- **Common issues**: Missing components, unsupported features, JSON syntax errors
+### File Locations for Claude-Code
+- **Compilation Check**: `./claude-compile-check.sh` (auto-installed)
+- **JSON Commands**: Drop files in `.vibe-commands/` directory
+- **Log Verification**: Check `.vibe-commands/logs/latest.log`
+- **Coverage Reports**: `.vibe-commands/coverage-analysis/`
+- **Test Template**: `.vibe-commands/test-scene-creation.json`
 
-### Current Component Support (v1.4.0)
+### Current Component Support (v1.4.2)
 - ✅ **UI**: Canvas, Button, Text, Image, ScrollView, TextMeshPro
 - ✅ **3D**: Cube, Sphere, Plane, Cylinder, Capsule, Camera, Light
 - ⚠️ **Partial**: Rigidbody, Colliders
 - ❌ **Missing**: ParticleSystem, custom scripts, animations
 
-### Compilation Validation for Claude-Code
-- **Script**: `./claude-compile-check.sh` (auto-installed with package)
-- **Purpose**: Validate Unity script changes without running tests
-- **Output**: Structured error/warning reports with file:line locations
-- **Exit Codes**: 0=success, 1=errors, 2=timeout, 3=script error
-- **Usage**: Run after making C# changes to verify compilation
+### JSON Command Examples for Claude-Code
+```json
+// Basic scene creation
+{"action":"create-scene","name":"MyScene","path":"Assets/Scenes"}
+
+// Scene with UI setup
+{"action":"create-scene","name":"MenuScene","path":"Assets/Scenes/UI","components":[
+  {"type":"canvas","name":"MainCanvas"},
+  {"type":"button","name":"PlayButton","parent":"MainCanvas","text":"Play"}
+]}
+
+// Add 3D objects
+{"action":"add-cube","name":"TestCube","position":[0,1,0],"scale":[2,2,2]}
+```
+
+### Claude-Code Decision Tree
+1. **After C# changes**: Run `./claude-compile-check.sh`
+   - Exit code 0: Proceed with scene creation
+   - Exit code 1: Fix compilation errors immediately, report to user
+   - Exit code 2+: Report timeout/system issues to user
+
+2. **For scene operations**: Use JSON commands with automatic verification
+   - Success: Continue workflow
+   - Failure: Report specific error from logs, ask user for guidance
+
+3. **Error Handling**: 
+   - **Compilation errors**: STOP and fix errors
+   - **Scene creation failures**: STOP, report error, ask user to check Unity Console
+   - **Missing components**: Note in summary, continue with supported components
 
 ### Development Workflow Status
 - **File Watcher**: ✅ ENABLED (automatic JSON processing)
-- **HTTP Server**: DISABLED
-- **CLI Commands**: DISABLED
-- **Manual Testing**: ✅ ACTIVE (Use Unity menu items)
-- **Claude Compile Check**: ✅ INSTALLED (automatic deployment)
+- **Compilation Check**: ✅ AUTOMATED (`./claude-compile-check.sh`)
+- **Log Verification**: ✅ AUTOMATED (structured log parsing)
+- **Error Detection**: ✅ AUTOMATED (exit codes + log analysis)
 
-## Vibe-Unity Claude Instructions
-* Whenever you create or modify a script, use the vibe-unity .sh tools to compile.
-* Whenever you have Unity compile, check the compilation logs for errors and warnings. Errors need to be fixed by you, and warnings should be mentioned during summarization after work is completed.
-* Whenever you use vibe-unity to create or modify a scene, verify it was created properly by referring to the logs. Any parts of a scene that could not be created with Vibe-Unity should be mentioned during summarization after work is completed.
-* Do NOT write to or create .meta files unless explicitly told to.
-* Whenever you are tasked with something that will have you creating scenes using Vibe-Unity, immediately ask if you should "pause and ask to continue", stop what you are doing, or continue when you encounter issues creating those scenes.
+## Automated Claude Instructions
+* **ALWAYS** run `./claude-compile-check.sh` after modifying C# scripts
+* **ONLY proceed** if compilation check returns exit code 0
+* **VERIFY scene creation** by checking `.vibe-commands/logs/latest.log` for success/error messages
+* **REPORT failures immediately** with specific error details from logs
+* **DO NOT** create .meta files unless explicitly requested
+* **ASK USER** for guidance only when encountering system-level failures or unsupported features
 
 ## For Detailed Usage
 - **Full Documentation**: [Package README](./Packages/com.ricoder.vibe-unity/README.md)
@@ -147,5 +166,6 @@ Tools > Vibe Unity > Scene State > Export Current Scene
 - **Coverage Analysis**: Check latest report in `.vibe-commands/coverage-analysis/`
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^VIBE-UNITY^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 
 
