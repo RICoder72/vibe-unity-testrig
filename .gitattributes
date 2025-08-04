@@ -1,0 +1,2 @@
+*.sh text eol=lf
+claude-compile-check.sh text eol=lf
