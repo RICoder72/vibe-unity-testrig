@@ -79,9 +79,12 @@ Both repositories use SSH for authentication:
   - Push changes to ./vibe-unity project
   - Note: Must be done from the current project path, cannot cd into the target path
 
+## Versioning Reminder
+- When commit/push this project and ../vibe-unity, make sure to increment the build version (unless I specify major or minor) in the projects and docs and docupdaters.
+
 ⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄VIBE-UNITY⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄
 
-# Vibe Unity Integration Guide (Auto-generated - v1.4.2)
+# Vibe Unity Integration Guide (Auto-generated - v1.4.3)
 
 ## Claude-Code Automated Workflow
 
@@ -110,7 +113,7 @@ sleep 3 && cat .vibe-commands/logs/latest.log
 - **Coverage Reports**: `.vibe-commands/coverage-analysis/`
 - **Test Template**: `.vibe-commands/test-scene-creation.json`
 
-### Current Component Support (v1.4.2)
+### Current Component Support (v1.4.3)
 - ✅ **UI**: Canvas, Button, Text, Image, ScrollView, TextMeshPro
 - ✅ **3D**: Cube, Sphere, Plane, Cylinder, Capsule, Camera, Light
 - ⚠️ **Partial**: Rigidbody, Colliders
@@ -166,6 +169,3 @@ sleep 3 && cat .vibe-commands/logs/latest.log
 - **Coverage Analysis**: Check latest report in `.vibe-commands/coverage-analysis/`
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^VIBE-UNITY^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-
