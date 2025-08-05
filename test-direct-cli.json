@@ -1,0 +1,25 @@
+{
+  "version": "1.0", 
+  "description": "Direct CLI test of modular system",
+  "scene": {
+    "name": "DirectTestScene",
+    "create": true,
+    "path": "Assets/Scenes",
+    "type": "DefaultGameObjects",
+    "addToBuild": false
+  },
+  "commands": [
+    {
+      "action": "add-canvas",
+      "name": "DirectCanvas",
+      "renderMode": "ScreenSpaceOverlay"
+    },
+    {
+      "action": "add-text", 
+      "name": "DirectText",
+      "parent": "DirectCanvas",
+      "text": "Direct Test Success!",
+      "fontSize": 16
+    }
+  ]
+}

@@ -1,0 +1,3043 @@
+{
+    "version": "1.0",
+    "metadata": {
+        "sceneName": "SampleScene",
+        "scenePath": "Assets/Scenes/SampleScene.unity",
+        "unityVersion": "6000.1.13f1",
+        "exportedBy": "VibeUnity",
+        "exportTimestamp": "2025-08-01 15:40:44",
+        "totalGameObjects": 3,
+        "totalComponents": 0,
+        "renderPipelines": [
+            "URP"
+        ]
+    },
+    "settings": {
+        "lighting": {
+            "realtimeGI": false,
+            "bakedGI": true,
+            "ambientColor": [
+                0.21199999749660493,
+                0.22699999809265138,
+                0.2590000033378601,
+                1.0
+            ],
+            "ambientMode": "Skybox",
+            "skyboxTint": [],
+            "ambientIntensity": 1.0
+        },
+        "render": {
+            "fog": false,
+            "fogColor": [
+                0.5,
+                0.5,
+                0.5,
+                1.0
+            ],
+            "fogMode": "ExponentialSquared",
+            "fogDensity": 0.009999999776482582,
+            "fogStartDistance": 0.0,
+            "fogEndDistance": 300.0,
+            "skyboxMaterial": "Resources/unity_builtin_extra"
+        },
+        "physics": {
+            "gravity": [
+                0.0,
+                -9.8100004196167,
+                0.0
+            ],
+            "defaultMaterial": "",
+            "bounceThreshold": 2.0,
+            "defaultSolverIterations": 6,
+            "defaultSolverVelocityIterations": 1
+        },
+        "audio": {
+            "volume": 1.0,
+            "dopplerFactor": 1.0,
+            "speedOfSound": 343.0
+        }
+    },
+    "gameObjects": [
+        {
+            "name": "Main Camera",
+            "hierarchyPath": "Main Camera",
+            "instanceId": 43780,
+            "isActive": true,
+            "tag": "MainCamera",
+            "layer": 0,
+            "isStatic": false,
+            "parentPath": "",
+            "childrenPaths": [],
+            "siblingIndex": 0,
+            "transform": {
+                "localPosition": [
+                    0.0,
+                    1.0,
+                    -10.0
+                ],
+                "localRotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "localScale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "worldPosition": [
+                    0.0,
+                    1.0,
+                    -10.0
+                ],
+                "worldRotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "worldScale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "components": [
+                {
+                    "typeName": "Transform",
+                    "fullTypeName": "UnityEngine.Transform",
+                    "enabled": true,
+                    "properties": [
+                        {
+                            "name": "position",
+                            "value": "0,1,-10",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "localPosition",
+                            "value": "0,1,-10",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "eulerAngles",
+                            "value": "0,0,0",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "localEulerAngles",
+                            "value": "0,0,0",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "right",
+                            "value": "1,0,0",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "up",
+                            "value": "0,1,0",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "forward",
+                            "value": "0,0,1",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "rotation",
+                            "value": "0,0,0,1",
+                            "typeName": "Quaternion",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "localRotation",
+                            "value": "0,0,0,1",
+                            "typeName": "Quaternion",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "localScale",
+                            "value": "1,1,1",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "parent",
+                            "value": "null",
+                            "typeName": "Transform",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "worldToLocalMatrix",
+                            "value": "1.00000\t0.00000\t0.00000\t0.00000\n0.00000\t1.00000\t0.00000\t-1.00000\n0.00000\t0.00000\t1.00000\t10.00000\n0.00000\t0.00000\t0.00000\t1.00000\n",
+                            "typeName": "Matrix4x4",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "localToWorldMatrix",
+                            "value": "1.00000\t0.00000\t0.00000\t0.00000\n0.00000\t1.00000\t0.00000\t1.00000\n0.00000\t0.00000\t1.00000\t-10.00000\n0.00000\t0.00000\t0.00000\t1.00000\n",
+                            "typeName": "Matrix4x4",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "root",
+                            "value": "Main Camera",
+                            "typeName": "Transform",
+                            "isSerializable": true,
+                            "isAssetReference": true,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "childCount",
+                            "value": "0",
+                            "typeName": "Int32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "lossyScale",
+                            "value": "1,1,1",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "hasChanged",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "hierarchyCapacity",
+                            "value": "1",
+                            "typeName": "Int32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "hierarchyCount",
+                            "value": "1",
+                            "typeName": "Int32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "transform",
+                            "value": "Main Camera",
+                            "typeName": "Transform",
+                            "isSerializable": true,
+                            "isAssetReference": true,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "gameObject",
+                            "value": "Main Camera",
+                            "typeName": "GameObject",
+                            "isSerializable": true,
+                            "isAssetReference": true,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "tag",
+                            "value": "MainCamera",
+                            "typeName": "String",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "name",
+                            "value": "Main Camera",
+                            "typeName": "String",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "hideFlags",
+                            "value": "None",
+                            "typeName": "HideFlags",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        }
+                    ],
+                    "isSupported": true,
+                    "missingFeatures": [
+                        "Property rigidbody: Exception has been thrown by the target of an invocation.",
+                        "Property rigidbody2D: Exception has been thrown by the target of an invocation.",
+                        "Property camera: Exception has been thrown by the target of an invocation.",
+                        "Property light: Exception has been thrown by the target of an invocation.",
+                        "Property animation: Exception has been thrown by the target of an invocation.",
+                        "Property constantForce: Exception has been thrown by the target of an invocation.",
+                        "Property renderer: Exception has been thrown by the target of an invocation.",
+                        "Property audio: Exception has been thrown by the target of an invocation.",
+                        "Property networkView: Exception has been thrown by the target of an invocation.",
+                        "Property collider: Exception has been thrown by the target of an invocation.",
+                        "Property collider2D: Exception has been thrown by the target of an invocation.",
+                        "Property hingeJoint: Exception has been thrown by the target of an invocation.",
+                        "Property particleSystem: Exception has been thrown by the target of an invocation."
+                    ]
+                },
+                {
+                    "typeName": "Camera",
+                    "fullTypeName": "UnityEngine.Camera",
+                    "enabled": true,
+                    "properties": [
+                        {
+                            "name": "nearClipPlane",
+                            "value": "0.3",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "farClipPlane",
+                            "value": "1000",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "fieldOfView",
+                            "value": "60",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "renderingPath",
+                            "value": "UsePlayerSettings",
+                            "typeName": "RenderingPath",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "actualRenderingPath",
+                            "value": "Forward",
+                            "typeName": "RenderingPath",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "allowHDR",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "allowMSAA",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "allowDynamicResolution",
+                            "value": "False",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "forceIntoRenderTexture",
+                            "value": "False",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "orthographicSize",
+                            "value": "5",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "orthographic",
+                            "value": "False",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "opaqueSortMode",
+                            "value": "Default",
+                            "typeName": "OpaqueSortMode",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "transparencySortMode",
+                            "value": "Default",
+                            "typeName": "TransparencySortMode",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "transparencySortAxis",
+                            "value": "0,0,1",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "depth",
+                            "value": "-1",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "aspect",
+                            "value": "1.338964",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "velocity",
+                            "value": "0,0,0",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "cullingMask",
+                            "value": "-1",
+                            "typeName": "Int32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "eventMask",
+                            "value": "-1",
+                            "typeName": "Int32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "layerCullSpherical",
+                            "value": "False",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "cameraType",
+                            "value": "Game",
+                            "typeName": "CameraType",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "overrideSceneCullingMask",
+                            "value": "0",
+                            "typeName": "UInt64",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "layerCullDistances",
+                            "value": "System.Single[]",
+                            "typeName": "Single[]",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "useOcclusionCulling",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "cullingMatrix",
+                            "value": "1.29358\t0.00000\t0.00000\t0.00000\n0.00000\t1.73205\t0.00000\t-1.73205\n0.00000\t0.00000\t1.00060\t9.40582\n0.00000\t0.00000\t1.00000\t10.00000\n",
+                            "typeName": "Matrix4x4",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "backgroundColor",
+                            "value": "0.1921569,0.3019608,0.4745098,0",
+                            "typeName": "Color",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "clearFlags",
+                            "value": "Skybox",
+                            "typeName": "CameraClearFlags",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "depthTextureMode",
+                            "value": "None",
+                            "typeName": "DepthTextureMode",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "clearStencilAfterLightingPass",
+                            "value": "False",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "usePhysicalProperties",
+                            "value": "False",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "iso",
+                            "value": "200",
+                            "typeName": "Int32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "shutterSpeed",
+                            "value": "0.005",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "aperture",
+                            "value": "16",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "focusDistance",
+                            "value": "10",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "focalLength",
+                            "value": "50",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "bladeCount",
+                            "value": "5",
+                            "typeName": "Int32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "curvature",
+                            "value": "2,11",
+                            "typeName": "Vector2",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "barrelClipping",
+                            "value": "0.25",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "anamorphism",
+                            "value": "0",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "sensorSize",
+                            "value": "36,24",
+                            "typeName": "Vector2",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "lensShift",
+                            "value": "0,0",
+                            "typeName": "Vector2",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "gateFit",
+                            "value": "Horizontal",
+                            "typeName": "GateFitMode",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "rect",
+                            "value": "0,0,1,1",
+                            "typeName": "Rect",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "pixelRect",
+                            "value": "0,0,1189,888",
+                            "typeName": "Rect",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "pixelWidth",
+                            "value": "1189",
+                            "typeName": "Int32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "pixelHeight",
+                            "value": "888",
+                            "typeName": "Int32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "scaledPixelWidth",
+                            "value": "1189",
+                            "typeName": "Int32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "scaledPixelHeight",
+                            "value": "888",
+                            "typeName": "Int32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "targetTexture",
+                            "value": "null",
+                            "typeName": "RenderTexture",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "activeTexture",
+                            "value": "null",
+                            "typeName": "RenderTexture",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "targetDisplay",
+                            "value": "0",
+                            "typeName": "Int32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "cameraToWorldMatrix",
+                            "value": "1.00000\t0.00000\t0.00000\t0.00000\n0.00000\t1.00000\t0.00000\t1.00000\n0.00000\t0.00000\t-1.00000\t-10.00000\n0.00000\t0.00000\t0.00000\t1.00000\n",
+                            "typeName": "Matrix4x4",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "worldToCameraMatrix",
+                            "value": "1.00000\t0.00000\t0.00000\t0.00000\n0.00000\t1.00000\t0.00000\t-1.00000\n0.00000\t0.00000\t-1.00000\t-10.00000\n0.00000\t0.00000\t0.00000\t1.00000\n",
+                            "typeName": "Matrix4x4",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "projectionMatrix",
+                            "value": "1.29358\t0.00000\t0.00000\t0.00000\n0.00000\t1.73205\t0.00000\t0.00000\n0.00000\t0.00000\t-1.00060\t-0.60018\n0.00000\t0.00000\t-1.00000\t0.00000\n",
+                            "typeName": "Matrix4x4",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "nonJitteredProjectionMatrix",
+                            "value": "1.29358\t0.00000\t0.00000\t0.00000\n0.00000\t1.73205\t0.00000\t0.00000\n0.00000\t0.00000\t-1.00060\t-0.60018\n0.00000\t0.00000\t-1.00000\t0.00000\n",
+                            "typeName": "Matrix4x4",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "useJitteredProjectionMatrixForTransparentRendering",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "previousViewProjectionMatrix",
+                            "value": "1.29358\t0.00000\t0.00000\t0.00000\n0.00000\t-1.73205\t0.00000\t1.73205\n0.00000\t0.00000\t-0.00030\t0.29709\n0.00000\t0.00000\t1.00000\t10.00000\n",
+                            "typeName": "Matrix4x4",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "scene",
+                            "value": "UnityEngine.SceneManagement.Scene",
+                            "typeName": "Scene",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "stereoEnabled",
+                            "value": "False",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "stereoSeparation",
+                            "value": "0.022",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "stereoConvergence",
+                            "value": "10",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "areVRStereoViewMatricesWithinSingleCullTolerance",
+                            "value": "False",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "stereoTargetEye",
+                            "value": "Both",
+                            "typeName": "StereoTargetEyeMask",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "stereoActiveEye",
+                            "value": "Mono",
+                            "typeName": "MonoOrStereoscopicEye",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "sceneViewFilterMode",
+                            "value": "Off",
+                            "typeName": "SceneViewFilterMode",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "renderCloudsInSceneView",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "commandBufferCount",
+                            "value": "0",
+                            "typeName": "Int32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "isOrthoGraphic",
+                            "value": "False",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "near",
+                            "value": "0.3",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "far",
+                            "value": "1000",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "fov",
+                            "value": "60",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "hdr",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "stereoMirrorMode",
+                            "value": "False",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "enabled",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "isActiveAndEnabled",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "transform",
+                            "value": "Main Camera",
+                            "typeName": "Transform",
+                            "isSerializable": true,
+                            "isAssetReference": true,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "gameObject",
+                            "value": "Main Camera",
+                            "typeName": "GameObject",
+                            "isSerializable": true,
+                            "isAssetReference": true,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "tag",
+                            "value": "MainCamera",
+                            "typeName": "String",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "name",
+                            "value": "Main Camera",
+                            "typeName": "String",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "hideFlags",
+                            "value": "None",
+                            "typeName": "HideFlags",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        }
+                    ],
+                    "isSupported": true,
+                    "missingFeatures": [
+                        "Property rigidbody: Exception has been thrown by the target of an invocation.",
+                        "Property rigidbody2D: Exception has been thrown by the target of an invocation.",
+                        "Property camera: Exception has been thrown by the target of an invocation.",
+                        "Property light: Exception has been thrown by the target of an invocation.",
+                        "Property animation: Exception has been thrown by the target of an invocation.",
+                        "Property constantForce: Exception has been thrown by the target of an invocation.",
+                        "Property renderer: Exception has been thrown by the target of an invocation.",
+                        "Property audio: Exception has been thrown by the target of an invocation.",
+                        "Property networkView: Exception has been thrown by the target of an invocation.",
+                        "Property collider: Exception has been thrown by the target of an invocation.",
+                        "Property collider2D: Exception has been thrown by the target of an invocation.",
+                        "Property hingeJoint: Exception has been thrown by the target of an invocation.",
+                        "Property particleSystem: Exception has been thrown by the target of an invocation."
+                    ]
+                },
+                {
+                    "typeName": "AudioListener",
+                    "fullTypeName": "UnityEngine.AudioListener",
+                    "enabled": true,
+                    "properties": [
+                        {
+                            "name": "velocityUpdateMode",
+                            "value": "Dynamic",
+                            "typeName": "AudioVelocityUpdateMode",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "enabled",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "isActiveAndEnabled",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "transform",
+                            "value": "Main Camera",
+                            "typeName": "Transform",
+                            "isSerializable": true,
+                            "isAssetReference": true,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "gameObject",
+                            "value": "Main Camera",
+                            "typeName": "GameObject",
+                            "isSerializable": true,
+                            "isAssetReference": true,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "tag",
+                            "value": "MainCamera",
+                            "typeName": "String",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "name",
+                            "value": "Main Camera",
+                            "typeName": "String",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "hideFlags",
+                            "value": "None",
+                            "typeName": "HideFlags",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        }
+                    ],
+                    "isSupported": true,
+                    "missingFeatures": [
+                        "Property rigidbody: Exception has been thrown by the target of an invocation.",
+                        "Property rigidbody2D: Exception has been thrown by the target of an invocation.",
+                        "Property camera: Exception has been thrown by the target of an invocation.",
+                        "Property light: Exception has been thrown by the target of an invocation.",
+                        "Property animation: Exception has been thrown by the target of an invocation.",
+                        "Property constantForce: Exception has been thrown by the target of an invocation.",
+                        "Property renderer: Exception has been thrown by the target of an invocation.",
+                        "Property audio: Exception has been thrown by the target of an invocation.",
+                        "Property networkView: Exception has been thrown by the target of an invocation.",
+                        "Property collider: Exception has been thrown by the target of an invocation.",
+                        "Property collider2D: Exception has been thrown by the target of an invocation.",
+                        "Property hingeJoint: Exception has been thrown by the target of an invocation.",
+                        "Property particleSystem: Exception has been thrown by the target of an invocation."
+                    ]
+                },
+                {
+                    "typeName": "UniversalAdditionalCameraData",
+                    "fullTypeName": "UnityEngine.Rendering.Universal.UniversalAdditionalCameraData",
+                    "enabled": true,
+                    "properties": [
+                        {
+                            "name": "version",
+                            "value": "2",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "renderShadows",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "requiresDepthOption",
+                            "value": "UsePipelineSettings",
+                            "typeName": "CameraOverrideOption",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "requiresColorOption",
+                            "value": "UsePipelineSettings",
+                            "typeName": "CameraOverrideOption",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "renderType",
+                            "value": "Base",
+                            "typeName": "CameraRenderType",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "cameraStack",
+                            "value": "System.Collections.Generic.List`1[UnityEngine.Camera]",
+                            "typeName": "List`1",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "clearDepth",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "requiresDepthTexture",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "requiresColorTexture",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "scriptableRenderer",
+                            "value": "UnityEngine.Rendering.Universal.UniversalRenderer",
+                            "typeName": "ScriptableRenderer",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "volumeLayerMask",
+                            "value": "UnityEngine.LayerMask",
+                            "typeName": "LayerMask",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "requiresVolumeFrameworkUpdate",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "volumeStack",
+                            "value": "null",
+                            "typeName": "VolumeStack",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "renderPostProcessing",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "antialiasing",
+                            "value": "None",
+                            "typeName": "AntialiasingMode",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "antialiasingQuality",
+                            "value": "High",
+                            "typeName": "AntialiasingQuality",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "history",
+                            "value": "UnityEngine.Rendering.Universal.UniversalCameraHistory",
+                            "typeName": "ICameraHistoryReadAccess",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "resetHistory",
+                            "value": "False",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "stopNaN",
+                            "value": "False",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "dithering",
+                            "value": "False",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "allowXRRendering",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "useScreenCoordOverride",
+                            "value": "False",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "screenSizeOverride",
+                            "value": "0,0,0,0",
+                            "typeName": "Vector4",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "screenCoordScaleBias",
+                            "value": "0,0,0,0",
+                            "typeName": "Vector4",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "allowHDROutput",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "destroyCancellationToken",
+                            "value": "System.Threading.CancellationToken",
+                            "typeName": "CancellationToken",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "useGUILayout",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "didStart",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "didAwake",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "runInEditMode",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "enabled",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "isActiveAndEnabled",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "transform",
+                            "value": "Main Camera",
+                            "typeName": "Transform",
+                            "isSerializable": true,
+                            "isAssetReference": true,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "gameObject",
+                            "value": "Main Camera",
+                            "typeName": "GameObject",
+                            "isSerializable": true,
+                            "isAssetReference": true,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "tag",
+                            "value": "MainCamera",
+                            "typeName": "String",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "name",
+                            "value": "Main Camera",
+                            "typeName": "String",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "hideFlags",
+                            "value": "None",
+                            "typeName": "HideFlags",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        }
+                    ],
+                    "isSupported": false,
+                    "missingFeatures": [
+                        "Property volumeTrigger: The variable m_VolumeTrigger of UniversalAdditionalCameraData has not been assigned.\nYou probably need to assign the m_VolumeTrigger variable of the UniversalAdditionalCameraData script in the inspector.",
+                        "Property taaSettings: Cannot invoke method returning ByRef type via reflection",
+                        "Property rigidbody: Exception has been thrown by the target of an invocation.",
+                        "Property rigidbody2D: Exception has been thrown by the target of an invocation.",
+                        "Property camera: Exception has been thrown by the target of an invocation.",
+                        "Property light: Exception has been thrown by the target of an invocation.",
+                        "Property animation: Exception has been thrown by the target of an invocation.",
+                        "Property constantForce: Exception has been thrown by the target of an invocation.",
+                        "Property renderer: Exception has been thrown by the target of an invocation.",
+                        "Property audio: Exception has been thrown by the target of an invocation.",
+                        "Property networkView: Exception has been thrown by the target of an invocation.",
+                        "Property collider: Exception has been thrown by the target of an invocation.",
+                        "Property collider2D: Exception has been thrown by the target of an invocation.",
+                        "Property hingeJoint: Exception has been thrown by the target of an invocation.",
+                        "Property particleSystem: Exception has been thrown by the target of an invocation."
+                    ]
+                }
+            ],
+            "uiInfo": {
+                "rectTransform": {
+                    "anchoredPosition": [],
+                    "anchorMin": [],
+                    "anchorMax": [],
+                    "offsetMin": [],
+                    "offsetMax": [],
+                    "pivot": [],
+                    "sizeDelta": []
+                },
+                "canvas": {
+                    "renderMode": "",
+                    "worldCamera": [],
+                    "planeDistance": 0.0,
+                    "sortingOrder": 0,
+                    "sortingLayerName": "",
+                    "overrideSorting": false,
+                    "scaleFactor": 0.0,
+                    "referenceResolution": [],
+                    "scaleMode": "",
+                    "matchWidthOrHeight": 0.0
+                },
+                "canvasGroup": "",
+                "layoutElement": {
+                    "ignoreLayout": false,
+                    "minWidth": 0.0,
+                    "minHeight": 0.0,
+                    "preferredWidth": 0.0,
+                    "preferredHeight": 0.0,
+                    "flexibleWidth": 0.0,
+                    "flexibleHeight": 0.0,
+                    "layoutPriority": 0
+                },
+                "graphic": {
+                    "graphicType": "",
+                    "color": [],
+                    "material": "",
+                    "raycastTarget": false,
+                    "sprite": "",
+                    "imageType": "",
+                    "preserveAspect": false,
+                    "text": "",
+                    "font": "",
+                    "fontSize": 0,
+                    "fontStyle": "",
+                    "alignment": "",
+                    "richText": false
+                }
+            }
+        },
+        {
+            "name": "Directional Light",
+            "hierarchyPath": "Directional Light",
+            "instanceId": 43790,
+            "isActive": true,
+            "tag": "Untagged",
+            "layer": 0,
+            "isStatic": false,
+            "parentPath": "",
+            "childrenPaths": [],
+            "siblingIndex": 1,
+            "transform": {
+                "localPosition": [
+                    0.0,
+                    3.0,
+                    0.0
+                ],
+                "localRotation": [
+                    0.4082178771495819,
+                    -0.23456968367099763,
+                    0.10938163101673126,
+                    0.8754261136054993
+                ],
+                "localScale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "worldPosition": [
+                    0.0,
+                    3.0,
+                    0.0
+                ],
+                "worldRotation": [
+                    0.4082178771495819,
+                    -0.23456968367099763,
+                    0.10938163101673126,
+                    0.8754261136054993
+                ],
+                "worldScale": [
+                    1.0,
+                    1.0,
+                    0.9999999403953552
+                ]
+            },
+            "components": [
+                {
+                    "typeName": "Transform",
+                    "fullTypeName": "UnityEngine.Transform",
+                    "enabled": true,
+                    "properties": [
+                        {
+                            "name": "position",
+                            "value": "0,3,0",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "localPosition",
+                            "value": "0,3,0",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "eulerAngles",
+                            "value": "50,330,0",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "localEulerAngles",
+                            "value": "50,330,0",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "right",
+                            "value": "0.8660254,0,0.4999999",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "up",
+                            "value": "-0.3830222,0.6427876,0.6634139",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "forward",
+                            "value": "-0.3213938,-0.7660444,0.5566705",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "rotation",
+                            "value": "0.4082179,-0.2345697,0.1093816,0.8754261",
+                            "typeName": "Quaternion",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "localRotation",
+                            "value": "0.4082179,-0.2345697,0.1093816,0.8754261",
+                            "typeName": "Quaternion",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "localScale",
+                            "value": "1,1,1",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "parent",
+                            "value": "null",
+                            "typeName": "Transform",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "worldToLocalMatrix",
+                            "value": "0.86603\t0.00000\t0.50000\t0.00000\n-0.38302\t0.64279\t0.66341\t-1.92836\n-0.32139\t-0.76604\t0.55667\t2.29813\n0.00000\t0.00000\t0.00000\t1.00000\n",
+                            "typeName": "Matrix4x4",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "localToWorldMatrix",
+                            "value": "0.86603\t-0.38302\t-0.32139\t0.00000\n0.00000\t0.64279\t-0.76604\t3.00000\n0.50000\t0.66341\t0.55667\t0.00000\n0.00000\t0.00000\t0.00000\t1.00000\n",
+                            "typeName": "Matrix4x4",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "root",
+                            "value": "Directional Light",
+                            "typeName": "Transform",
+                            "isSerializable": true,
+                            "isAssetReference": true,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "childCount",
+                            "value": "0",
+                            "typeName": "Int32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "lossyScale",
+                            "value": "1,1,0.9999999",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "hasChanged",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "hierarchyCapacity",
+                            "value": "1",
+                            "typeName": "Int32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "hierarchyCount",
+                            "value": "1",
+                            "typeName": "Int32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "transform",
+                            "value": "Directional Light",
+                            "typeName": "Transform",
+                            "isSerializable": true,
+                            "isAssetReference": true,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "gameObject",
+                            "value": "Directional Light",
+                            "typeName": "GameObject",
+                            "isSerializable": true,
+                            "isAssetReference": true,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "tag",
+                            "value": "Untagged",
+                            "typeName": "String",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "name",
+                            "value": "Directional Light",
+                            "typeName": "String",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "hideFlags",
+                            "value": "None",
+                            "typeName": "HideFlags",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        }
+                    ],
+                    "isSupported": true,
+                    "missingFeatures": [
+                        "Property rigidbody: Exception has been thrown by the target of an invocation.",
+                        "Property rigidbody2D: Exception has been thrown by the target of an invocation.",
+                        "Property camera: Exception has been thrown by the target of an invocation.",
+                        "Property light: Exception has been thrown by the target of an invocation.",
+                        "Property animation: Exception has been thrown by the target of an invocation.",
+                        "Property constantForce: Exception has been thrown by the target of an invocation.",
+                        "Property renderer: Exception has been thrown by the target of an invocation.",
+                        "Property audio: Exception has been thrown by the target of an invocation.",
+                        "Property networkView: Exception has been thrown by the target of an invocation.",
+                        "Property collider: Exception has been thrown by the target of an invocation.",
+                        "Property collider2D: Exception has been thrown by the target of an invocation.",
+                        "Property hingeJoint: Exception has been thrown by the target of an invocation.",
+                        "Property particleSystem: Exception has been thrown by the target of an invocation."
+                    ]
+                },
+                {
+                    "typeName": "Light",
+                    "fullTypeName": "UnityEngine.Light",
+                    "enabled": true,
+                    "properties": [
+                        {
+                            "name": "type",
+                            "value": "Directional",
+                            "typeName": "LightType",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "shape",
+                            "value": "Cone",
+                            "typeName": "LightShape",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "spotAngle",
+                            "value": "30",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "innerSpotAngle",
+                            "value": "21.80208",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "color",
+                            "value": "1,1,1,1",
+                            "typeName": "Color",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "colorTemperature",
+                            "value": "5000",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "useColorTemperature",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "intensity",
+                            "value": "2",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "bounceIntensity",
+                            "value": "1",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "lightUnit",
+                            "value": "Candela",
+                            "typeName": "LightUnit",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "luxAtDistance",
+                            "value": "1",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "enableSpotReflector",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "useBoundingSphereOverride",
+                            "value": "False",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "boundingSphereOverride",
+                            "value": "0,0,0,0",
+                            "typeName": "Vector4",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "useViewFrustumForShadowCasterCull",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "forceVisible",
+                            "value": "False",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "shadowCustomResolution",
+                            "value": "-1",
+                            "typeName": "Int32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "shadowBias",
+                            "value": "0.05",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "shadowNormalBias",
+                            "value": "0.4",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "shadowNearPlane",
+                            "value": "0.2",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "useShadowMatrixOverride",
+                            "value": "False",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "shadowMatrixOverride",
+                            "value": "1.00000\t0.00000\t0.00000\t0.00000\n0.00000\t1.00000\t0.00000\t0.00000\n0.00000\t0.00000\t1.00000\t0.00000\n0.00000\t0.00000\t0.00000\t1.00000\n",
+                            "typeName": "Matrix4x4",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "range",
+                            "value": "10",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "dilatedRange",
+                            "value": "10",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "flare",
+                            "value": "null",
+                            "typeName": "Flare",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "bakingOutput",
+                            "value": "UnityEngine.LightBakingOutput",
+                            "typeName": "LightBakingOutput",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "cullingMask",
+                            "value": "-1",
+                            "typeName": "Int32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "renderingLayerMask",
+                            "value": "1",
+                            "typeName": "Int32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "lightShadowCasterMode",
+                            "value": "Default",
+                            "typeName": "LightShadowCasterMode",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "shadowRadius",
+                            "value": "0",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "shadowAngle",
+                            "value": "0",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "shadows",
+                            "value": "Soft",
+                            "typeName": "LightShadows",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "shadowStrength",
+                            "value": "1",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "shadowResolution",
+                            "value": "FromQualitySettings",
+                            "typeName": "LightShadowResolution",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "shadowSoftness",
+                            "value": "4",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "shadowSoftnessFade",
+                            "value": "1",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "layerShadowCullDistances",
+                            "value": "System.Single[]",
+                            "typeName": "Single[]",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "cookieSize",
+                            "value": "10",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "cookie",
+                            "value": "null",
+                            "typeName": "Texture",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "renderMode",
+                            "value": "Auto",
+                            "typeName": "LightRenderMode",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "bakedIndex",
+                            "value": "0",
+                            "typeName": "Int32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "areaSize",
+                            "value": "1,1",
+                            "typeName": "Vector2",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "lightmapBakeType",
+                            "value": "Realtime",
+                            "typeName": "LightmapBakeType",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "commandBufferCount",
+                            "value": "0",
+                            "typeName": "Int32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "shadowConstantBias",
+                            "value": "0",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "shadowObjectSizeBias",
+                            "value": "0",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "attenuate",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "lightmappingMode",
+                            "value": "Realtime",
+                            "typeName": "LightmappingMode",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "isBaked",
+                            "value": "False",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "alreadyLightmapped",
+                            "value": "False",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "enabled",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "isActiveAndEnabled",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "transform",
+                            "value": "Directional Light",
+                            "typeName": "Transform",
+                            "isSerializable": true,
+                            "isAssetReference": true,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "gameObject",
+                            "value": "Directional Light",
+                            "typeName": "GameObject",
+                            "isSerializable": true,
+                            "isAssetReference": true,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "tag",
+                            "value": "Untagged",
+                            "typeName": "String",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "name",
+                            "value": "Directional Light",
+                            "typeName": "String",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "hideFlags",
+                            "value": "None",
+                            "typeName": "HideFlags",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        }
+                    ],
+                    "isSupported": true,
+                    "missingFeatures": [
+                        "Property rigidbody: Exception has been thrown by the target of an invocation.",
+                        "Property rigidbody2D: Exception has been thrown by the target of an invocation.",
+                        "Property camera: Exception has been thrown by the target of an invocation.",
+                        "Property light: Exception has been thrown by the target of an invocation.",
+                        "Property animation: Exception has been thrown by the target of an invocation.",
+                        "Property constantForce: Exception has been thrown by the target of an invocation.",
+                        "Property renderer: Exception has been thrown by the target of an invocation.",
+                        "Property audio: Exception has been thrown by the target of an invocation.",
+                        "Property networkView: Exception has been thrown by the target of an invocation.",
+                        "Property collider: Exception has been thrown by the target of an invocation.",
+                        "Property collider2D: Exception has been thrown by the target of an invocation.",
+                        "Property hingeJoint: Exception has been thrown by the target of an invocation.",
+                        "Property particleSystem: Exception has been thrown by the target of an invocation."
+                    ]
+                },
+                {
+                    "typeName": "UniversalAdditionalLightData",
+                    "fullTypeName": "UnityEngine.Rendering.Universal.UniversalAdditionalLightData",
+                    "enabled": true,
+                    "properties": [
+                        {
+                            "name": "usePipelineSettings",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "additionalLightsShadowResolutionTier",
+                            "value": "2",
+                            "typeName": "Int32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "lightLayerMask",
+                            "value": "LightLayerDefault",
+                            "typeName": "LightLayerEnum",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "renderingLayers",
+                            "value": "1",
+                            "typeName": "UInt32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "customShadowLayers",
+                            "value": "False",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "shadowLayerMask",
+                            "value": "LightLayerDefault",
+                            "typeName": "LightLayerEnum",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "shadowRenderingLayers",
+                            "value": "1",
+                            "typeName": "UInt32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "lightCookieSize",
+                            "value": "1,1",
+                            "typeName": "Vector2",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "lightCookieOffset",
+                            "value": "0,0",
+                            "typeName": "Vector2",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "softShadowQuality",
+                            "value": "Low",
+                            "typeName": "SoftShadowQuality",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "destroyCancellationToken",
+                            "value": "System.Threading.CancellationToken",
+                            "typeName": "CancellationToken",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "useGUILayout",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "didStart",
+                            "value": "False",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "didAwake",
+                            "value": "False",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "runInEditMode",
+                            "value": "False",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "enabled",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "isActiveAndEnabled",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "transform",
+                            "value": "Directional Light",
+                            "typeName": "Transform",
+                            "isSerializable": true,
+                            "isAssetReference": true,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "gameObject",
+                            "value": "Directional Light",
+                            "typeName": "GameObject",
+                            "isSerializable": true,
+                            "isAssetReference": true,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "tag",
+                            "value": "Untagged",
+                            "typeName": "String",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "name",
+                            "value": "Directional Light",
+                            "typeName": "String",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "hideFlags",
+                            "value": "None",
+                            "typeName": "HideFlags",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        }
+                    ],
+                    "isSupported": false,
+                    "missingFeatures": [
+                        "Property rigidbody: Exception has been thrown by the target of an invocation.",
+                        "Property rigidbody2D: Exception has been thrown by the target of an invocation.",
+                        "Property camera: Exception has been thrown by the target of an invocation.",
+                        "Property light: Exception has been thrown by the target of an invocation.",
+                        "Property animation: Exception has been thrown by the target of an invocation.",
+                        "Property constantForce: Exception has been thrown by the target of an invocation.",
+                        "Property renderer: Exception has been thrown by the target of an invocation.",
+                        "Property audio: Exception has been thrown by the target of an invocation.",
+                        "Property networkView: Exception has been thrown by the target of an invocation.",
+                        "Property collider: Exception has been thrown by the target of an invocation.",
+                        "Property collider2D: Exception has been thrown by the target of an invocation.",
+                        "Property hingeJoint: Exception has been thrown by the target of an invocation.",
+                        "Property particleSystem: Exception has been thrown by the target of an invocation."
+                    ]
+                }
+            ],
+            "uiInfo": {
+                "rectTransform": {
+                    "anchoredPosition": [],
+                    "anchorMin": [],
+                    "anchorMax": [],
+                    "offsetMin": [],
+                    "offsetMax": [],
+                    "pivot": [],
+                    "sizeDelta": []
+                },
+                "canvas": {
+                    "renderMode": "",
+                    "worldCamera": [],
+                    "planeDistance": 0.0,
+                    "sortingOrder": 0,
+                    "sortingLayerName": "",
+                    "overrideSorting": false,
+                    "scaleFactor": 0.0,
+                    "referenceResolution": [],
+                    "scaleMode": "",
+                    "matchWidthOrHeight": 0.0
+                },
+                "canvasGroup": "",
+                "layoutElement": {
+                    "ignoreLayout": false,
+                    "minWidth": 0.0,
+                    "minHeight": 0.0,
+                    "preferredWidth": 0.0,
+                    "preferredHeight": 0.0,
+                    "flexibleWidth": 0.0,
+                    "flexibleHeight": 0.0,
+                    "layoutPriority": 0
+                },
+                "graphic": {
+                    "graphicType": "",
+                    "color": [],
+                    "material": "",
+                    "raycastTarget": false,
+                    "sprite": "",
+                    "imageType": "",
+                    "preserveAspect": false,
+                    "text": "",
+                    "font": "",
+                    "fontSize": 0,
+                    "fontStyle": "",
+                    "alignment": "",
+                    "richText": false
+                }
+            }
+        },
+        {
+            "name": "Global Volume",
+            "hierarchyPath": "Global Volume",
+            "instanceId": 43798,
+            "isActive": true,
+            "tag": "Untagged",
+            "layer": 0,
+            "isStatic": false,
+            "parentPath": "",
+            "childrenPaths": [],
+            "siblingIndex": 2,
+            "transform": {
+                "localPosition": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "localRotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "localScale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "worldPosition": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "worldRotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "worldScale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "components": [
+                {
+                    "typeName": "Transform",
+                    "fullTypeName": "UnityEngine.Transform",
+                    "enabled": true,
+                    "properties": [
+                        {
+                            "name": "position",
+                            "value": "0,0,0",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "localPosition",
+                            "value": "0,0,0",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "eulerAngles",
+                            "value": "0,0,0",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "localEulerAngles",
+                            "value": "0,0,0",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "right",
+                            "value": "1,0,0",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "up",
+                            "value": "0,1,0",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "forward",
+                            "value": "0,0,1",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "rotation",
+                            "value": "0,0,0,1",
+                            "typeName": "Quaternion",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "localRotation",
+                            "value": "0,0,0,1",
+                            "typeName": "Quaternion",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "localScale",
+                            "value": "1,1,1",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "parent",
+                            "value": "null",
+                            "typeName": "Transform",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "worldToLocalMatrix",
+                            "value": "1.00000\t0.00000\t0.00000\t0.00000\n0.00000\t1.00000\t0.00000\t0.00000\n0.00000\t0.00000\t1.00000\t0.00000\n0.00000\t0.00000\t0.00000\t1.00000\n",
+                            "typeName": "Matrix4x4",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "localToWorldMatrix",
+                            "value": "1.00000\t0.00000\t0.00000\t0.00000\n0.00000\t1.00000\t0.00000\t0.00000\n0.00000\t0.00000\t1.00000\t0.00000\n0.00000\t0.00000\t0.00000\t1.00000\n",
+                            "typeName": "Matrix4x4",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "root",
+                            "value": "Global Volume",
+                            "typeName": "Transform",
+                            "isSerializable": true,
+                            "isAssetReference": true,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "childCount",
+                            "value": "0",
+                            "typeName": "Int32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "lossyScale",
+                            "value": "1,1,1",
+                            "typeName": "Vector3",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "hasChanged",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "hierarchyCapacity",
+                            "value": "1",
+                            "typeName": "Int32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "hierarchyCount",
+                            "value": "1",
+                            "typeName": "Int32",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "transform",
+                            "value": "Global Volume",
+                            "typeName": "Transform",
+                            "isSerializable": true,
+                            "isAssetReference": true,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "gameObject",
+                            "value": "Global Volume",
+                            "typeName": "GameObject",
+                            "isSerializable": true,
+                            "isAssetReference": true,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "tag",
+                            "value": "Untagged",
+                            "typeName": "String",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "name",
+                            "value": "Global Volume",
+                            "typeName": "String",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "hideFlags",
+                            "value": "None",
+                            "typeName": "HideFlags",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        }
+                    ],
+                    "isSupported": true,
+                    "missingFeatures": [
+                        "Property rigidbody: Exception has been thrown by the target of an invocation.",
+                        "Property rigidbody2D: Exception has been thrown by the target of an invocation.",
+                        "Property camera: Exception has been thrown by the target of an invocation.",
+                        "Property light: Exception has been thrown by the target of an invocation.",
+                        "Property animation: Exception has been thrown by the target of an invocation.",
+                        "Property constantForce: Exception has been thrown by the target of an invocation.",
+                        "Property renderer: Exception has been thrown by the target of an invocation.",
+                        "Property audio: Exception has been thrown by the target of an invocation.",
+                        "Property networkView: Exception has been thrown by the target of an invocation.",
+                        "Property collider: Exception has been thrown by the target of an invocation.",
+                        "Property collider2D: Exception has been thrown by the target of an invocation.",
+                        "Property hingeJoint: Exception has been thrown by the target of an invocation.",
+                        "Property particleSystem: Exception has been thrown by the target of an invocation."
+                    ]
+                },
+                {
+                    "typeName": "Volume",
+                    "fullTypeName": "UnityEngine.Rendering.Volume",
+                    "enabled": true,
+                    "properties": [
+                        {
+                            "name": "priority",
+                            "value": "0",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "blendDistance",
+                            "value": "0",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "weight",
+                            "value": "1",
+                            "typeName": "Single",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "sharedProfile",
+                            "value": "SampleSceneProfile",
+                            "typeName": "VolumeProfile",
+                            "isSerializable": true,
+                            "isAssetReference": true,
+                            "assetPath": "Assets/Settings/SampleSceneProfile.asset"
+                        },
+                        {
+                            "name": "isGlobal",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "profile",
+                            "value": "SampleSceneProfile",
+                            "typeName": "VolumeProfile",
+                            "isSerializable": true,
+                            "isAssetReference": true,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "colliders",
+                            "value": "System.Collections.Generic.List`1[UnityEngine.Collider]",
+                            "typeName": "List`1",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "destroyCancellationToken",
+                            "value": "System.Threading.CancellationToken",
+                            "typeName": "CancellationToken",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "useGUILayout",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "didStart",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "didAwake",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "runInEditMode",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "enabled",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "isActiveAndEnabled",
+                            "value": "True",
+                            "typeName": "Boolean",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "transform",
+                            "value": "Global Volume",
+                            "typeName": "Transform",
+                            "isSerializable": true,
+                            "isAssetReference": true,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "gameObject",
+                            "value": "Global Volume",
+                            "typeName": "GameObject",
+                            "isSerializable": true,
+                            "isAssetReference": true,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "tag",
+                            "value": "Untagged",
+                            "typeName": "String",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "name",
+                            "value": "Global Volume",
+                            "typeName": "String",
+                            "isSerializable": true,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        },
+                        {
+                            "name": "hideFlags",
+                            "value": "None",
+                            "typeName": "HideFlags",
+                            "isSerializable": false,
+                            "isAssetReference": false,
+                            "assetPath": ""
+                        }
+                    ],
+                    "isSupported": false,
+                    "missingFeatures": [
+                        "Property rigidbody: Exception has been thrown by the target of an invocation.",
+                        "Property rigidbody2D: Exception has been thrown by the target of an invocation.",
+                        "Property camera: Exception has been thrown by the target of an invocation.",
+                        "Property light: Exception has been thrown by the target of an invocation.",
+                        "Property animation: Exception has been thrown by the target of an invocation.",
+                        "Property constantForce: Exception has been thrown by the target of an invocation.",
+                        "Property renderer: Exception has been thrown by the target of an invocation.",
+                        "Property audio: Exception has been thrown by the target of an invocation.",
+                        "Property networkView: Exception has been thrown by the target of an invocation.",
+                        "Property collider: Exception has been thrown by the target of an invocation.",
+                        "Property collider2D: Exception has been thrown by the target of an invocation.",
+                        "Property hingeJoint: Exception has been thrown by the target of an invocation.",
+                        "Property particleSystem: Exception has been thrown by the target of an invocation."
+                    ]
+                }
+            ],
+            "uiInfo": {
+                "rectTransform": {
+                    "anchoredPosition": [],
+                    "anchorMin": [],
+                    "anchorMax": [],
+                    "offsetMin": [],
+                    "offsetMax": [],
+                    "pivot": [],
+                    "sizeDelta": []
+                },
+                "canvas": {
+                    "renderMode": "",
+                    "worldCamera": [],
+                    "planeDistance": 0.0,
+                    "sortingOrder": 0,
+                    "sortingLayerName": "",
+                    "overrideSorting": false,
+                    "scaleFactor": 0.0,
+                    "referenceResolution": [],
+                    "scaleMode": "",
+                    "matchWidthOrHeight": 0.0
+                },
+                "canvasGroup": "",
+                "layoutElement": {
+                    "ignoreLayout": false,
+                    "minWidth": 0.0,
+                    "minHeight": 0.0,
+                    "preferredWidth": 0.0,
+                    "preferredHeight": 0.0,
+                    "flexibleWidth": 0.0,
+                    "flexibleHeight": 0.0,
+                    "layoutPriority": 0
+                },
+                "graphic": {
+                    "graphicType": "",
+                    "color": [],
+                    "material": "",
+                    "raycastTarget": false,
+                    "sprite": "",
+                    "imageType": "",
+                    "preserveAspect": false,
+                    "text": "",
+                    "font": "",
+                    "fontSize": 0,
+                    "fontStyle": "",
+                    "alignment": "",
+                    "richText": false
+                }
+            }
+        }
+    ],
+    "assetReferences": [
+        "Assets/Settings/SampleSceneProfile.asset"
+    ],
+    "coverageReport": {
+        "summary": {
+            "totalGameObjects": 3,
+            "totalComponents": 9,
+            "supportedComponents": 6,
+            "partiallySupported": 0,
+            "unsupportedComponents": 3,
+            "coveragePercentage": 66.66666412353516,
+            "canFullyRebuild": true
+        },
+        "componentCoverage": [
+            {
+                "componentType": "Transform",
+                "instanceCount": 3,
+                "isSupported": true,
+                "supportLevel": "Full",
+                "supportedProperties": [],
+                "missingProperties": [],
+                "missingFeatures": []
+            },
+            {
+                "componentType": "Camera",
+                "instanceCount": 1,
+                "isSupported": true,
+                "supportLevel": "Full",
+                "supportedProperties": [],
+                "missingProperties": [],
+                "missingFeatures": []
+            },
+            {
+                "componentType": "AudioListener",
+                "instanceCount": 1,
+                "isSupported": true,
+                "supportLevel": "Full",
+                "supportedProperties": [],
+                "missingProperties": [],
+                "missingFeatures": []
+            },
+            {
+                "componentType": "UniversalAdditionalCameraData",
+                "instanceCount": 1,
+                "isSupported": false,
+                "supportLevel": "None",
+                "supportedProperties": [],
+                "missingProperties": [],
+                "missingFeatures": []
+            },
+            {
+                "componentType": "Light",
+                "instanceCount": 1,
+                "isSupported": true,
+                "supportLevel": "Full",
+                "supportedProperties": [],
+                "missingProperties": [],
+                "missingFeatures": []
+            },
+            {
+                "componentType": "UniversalAdditionalLightData",
+                "instanceCount": 1,
+                "isSupported": false,
+                "supportLevel": "None",
+                "supportedProperties": [],
+                "missingProperties": [],
+                "missingFeatures": []
+            },
+            {
+                "componentType": "Volume",
+                "instanceCount": 1,
+                "isSupported": false,
+                "supportLevel": "None",
+                "supportedProperties": [],
+                "missingProperties": [],
+                "missingFeatures": []
+            }
+        ],
+        "gaps": [
+            {
+                "category": "Component",
+                "severity": "Warning",
+                "componentType": "UniversalAdditionalCameraData",
+                "missingItem": "UniversalAdditionalCameraData",
+                "description": "Component type 'UniversalAdditionalCameraData' is not supported for scene rebuilding",
+                "affectedCount": 1,
+                "examplePaths": [
+                    "Main Camera"
+                ],
+                "recommendation": "Add support for UniversalAdditionalCameraData component in VibeUnity package"
+            },
+            {
+                "category": "Component",
+                "severity": "Warning",
+                "componentType": "UniversalAdditionalLightData",
+                "missingItem": "UniversalAdditionalLightData",
+                "description": "Component type 'UniversalAdditionalLightData' is not supported for scene rebuilding",
+                "affectedCount": 1,
+                "examplePaths": [
+                    "Directional Light"
+                ],
+                "recommendation": "Add support for UniversalAdditionalLightData component in VibeUnity package"
+            },
+            {
+                "category": "Component",
+                "severity": "Warning",
+                "componentType": "Volume",
+                "missingItem": "Volume",
+                "description": "Component type 'Volume' is not supported for scene rebuilding",
+                "affectedCount": 1,
+                "examplePaths": [
+                    "Global Volume"
+                ],
+                "recommendation": "Add support for Volume component in VibeUnity package"
+            }
+        ],
+        "recommendations": [
+            "Implement support for most common missing components: UniversalAdditionalCameraData, UniversalAdditionalLightData, Volume",
+            "Current coverage is 66.7%. Focus on most frequently used components to improve coverage."
+        ]
+    }
+}

@@ -1,11 +1,10 @@
 {
   "dependencies": {
     "com.ricoder.vibe-unity": {
-      "version": "https://github.com/RICoder72/vibe-unity.git",
+      "version": "file:com.ricoder.vibe-unity",
       "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "e67153b1eebb81342a8f9a1ffb6abb9507138f9e"
+      "source": "embedded",
+      "dependencies": {}
     },
     "com.unity.ai.navigation": {
       "version": "2.0.8",

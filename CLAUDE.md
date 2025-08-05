@@ -84,7 +84,7 @@ Both repositories use SSH for authentication:
 
 ⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄VIBE-UNITY⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄
 
-# Vibe Unity Integration Guide (Auto-generated - v1.4.3)
+# Vibe Unity Integration Guide (Auto-generated - v1.5.0)
 
 ## Claude-Code Automated Workflow
 
@@ -113,7 +113,7 @@ sleep 3 && cat .vibe-commands/logs/latest.log
 - **Coverage Reports**: `.vibe-commands/coverage-analysis/`
 - **Test Template**: `.vibe-commands/test-scene-creation.json`
 
-### Current Component Support (v1.4.3)
+### Current Component Support (v1.5.0)
 - ✅ **UI**: Canvas, Button, Text, Image, ScrollView, TextMeshPro
 - ✅ **3D**: Cube, Sphere, Plane, Cylinder, Capsule, Camera, Light
 - ⚠️ **Partial**: Rigidbody, Colliders
