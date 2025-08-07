@@ -387,6 +387,38 @@ monitor_compilation() {
     fi
 }
 
+# Function to trigger Unity asset refresh via menu
+trigger_unity_refresh() {
+    echo "Triggering Unity asset refresh..." >&2
+    
+    # Method 1: Try Ctrl+R shortcut for asset refresh
+    powershell.exe -Command "
+    \$unity = Get-Process -Name 'Unity' -ErrorAction SilentlyContinue | 
+              Where-Object { \$_.MainWindowTitle -like '*${PROJECT_NAME}*' } | 
+              Select-Object -First 1;
+    
+    if (\$unity) {
+        Add-Type -AssemblyName Microsoft.VisualBasic;
+        [Microsoft.VisualBasic.Interaction]::AppActivate(\$unity.Id);
+        Start-Sleep -Milliseconds 500;
+        
+        # Send Ctrl+R to refresh assets
+        Add-Type -AssemblyName System.Windows.Forms;
+        [System.Windows.Forms.SendKeys]::SendWait('^r');
+        Start-Sleep -Milliseconds 200;
+        
+        # Also try F5 (alternative refresh shortcut)
+        [System.Windows.Forms.SendKeys]::SendWait('{F5}');
+        
+        Write-Host 'Sent Ctrl+R and F5 to Unity for asset refresh';
+    } else {
+        Write-Host 'Unity window not found for refresh command' -ForegroundColor Yellow;
+        return 1;
+    }" 2>/dev/null
+    
+    return $?
+}
+
 # Main execution function
 main() {
     # Step 0: Detect project name
@@ -395,14 +427,29 @@ main() {
     local result=3  # Start with retry needed
     
     while [[ $result -eq 3 ]] && [[ $RETRY_COUNT -le $MAX_RETRIES ]]; do
-        # Step 1: Focus Unity to trigger compilation
+        # Step 1: Focus Unity and trigger asset refresh
         if ! focus_unity; then
             output_result "ERROR" "0" "0" "Failed to focus Unity window. Ensure Unity is running."
             return 2
         fi
         
-        # Brief pause to allow Unity to process the focus
-        sleep 2
+        # Step 1.5: Trigger asset refresh to ensure Unity detects file changes
+        trigger_unity_refresh
+        echo "Giving Unity time to detect changes and start compilation..." >&2
+        sleep 5  # Increased from 2+3=5 to a single 5s delay for clarity
+        
+        # Additional check: Wait a bit more if Unity window shows it's busy
+        local unity_title=$(powershell.exe -Command "
+            \$unity = Get-Process -Name 'Unity' -ErrorAction SilentlyContinue | 
+                      Where-Object { \$_.MainWindowTitle -like '*${PROJECT_NAME}*' } | 
+                      Select-Object -First 1;
+            if (\$unity) { \$unity.MainWindowTitle } else { 'Not Found' }
+        " 2>/dev/null | tr -d '\r')
+        
+        if echo "$unity_title" | grep -q "Compiling\|busy"; then
+            echo "Unity is showing compilation activity, waiting additional time..." >&2
+            sleep 3
+        fi
         
         # Step 2: Focus back to WSL terminal
         focus_wsl
