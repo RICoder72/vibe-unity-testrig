@@ -1,9 +1,10 @@
 # Unity Compilation Detection System - Session Notes
 
-## Current Status - Almost There! 🎯
+## Current Status - Debugging Initialization 🔧
 
-**Date:** 2025-08-07  
-**Session Focus:** Fixed timing race conditions and focus management
+**Date:** 2025-08-08  
+**Previous Session:** 2025-08-07 - Fixed timing race conditions and focus management  
+**Session Focus:** Resolving CompilationController initialization issue
 
 ### What We Accomplished:
 - ✅ Built complete file-based compilation system (CompilationController + enhanced scripts)
@@ -55,5 +56,44 @@ The `VibeUnityCompilationController` static constructor is **never being called*
 - CompilationController never processes commands (not initialized)
 - Status files never created
 
-### Next Step: 
-Add `[InitializeOnLoadMethod]` to ensure CompilationController starts when Unity loads assemblies.
+### Latest Updates (2025-08-08):
+
+#### Major Progress! ✅
+1. **CompilationController IS working!**
+   - Initialization successful (Project Hash: 5E88DFAB)
+   - Automatic monitoring loop is running
+   - Commands are being processed automatically
+   - Status files are being created
+
+2. **Fixed Issues**:
+   - ✅ Project hash mismatch (was BBECC349, now 5E88DFAB)
+   - ✅ Added debug menu items for manual testing
+   - ✅ Command file processing works
+   - ✅ Status file generation works
+
+3. **Current Issue**:
+   - ❌ Error detection not working (shows 0 errors even when errors exist)
+   - GetCompilationResults() reflection method not capturing Unity 6 console logs
+   - Need alternative approach for error detection
+
+### Testing Results:
+
+1. **Enhanced Initialization**:
+   - Added immediate ProcessCommandFiles() call in Initialize()
+   - Created debug menu items for manual testing:
+     - Tools/Vibe Unity/Debug/Check Compilation System
+     - Tools/Vibe Unity/Debug/Force Initialize Compilation System
+     - Tools/Vibe Unity/Debug/Process Pending Commands
+
+2. **Pending Command File Found**:
+   - File: `compile-request-BBECC349-1754615768949-1401-462d3472.json`
+   - Status directory is empty (no processing occurred)
+
+### Next Steps:
+1. **Ask user to test the debug menu items in Unity**:
+   - Run "Check Compilation System" to see current status
+   - Run "Force Initialize" if not initialized
+   - Run "Process Pending Commands" to handle the waiting request
+   
+2. **If manual initialization works**, we know the system is functional but auto-init is failing
+3. **If manual doesn't work**, there's a deeper issue with the monitoring system

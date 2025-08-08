@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEditor.Compilation;
 using UnityEngine;
 using System;
 using System.IO;
@@ -13,18 +14,29 @@ namespace VibeUnity.Editor
     /// Controls and monitors Unity compilation for external tools like claude-code
     /// Provides hardened triggers, precise timing, and detailed error/warning reporting
     /// </summary>
+    [InitializeOnLoad]
     public class VibeUnityCompilationController : AssetPostprocessor
     {
         private static bool wasCompiling = false;
         private static DateTime compilationStartTime;
         private static DateTime compilationEndTime;
         private static string currentRequestId = null;
-        private static readonly string projectHash;
-        private static readonly string commandsDir;
-        private static readonly string statusDir;
+        private static string projectHash;
+        private static string commandsDir;
+        private static string statusDir;
         private static readonly bool debugMode = true; // Keep status files for debugging
         
+        // CompilationPipeline error collection
+        private static List<CompilerMessage> compilationMessages = new List<CompilerMessage>();
+        private static bool compilationHasStarted = false;
+        
         static VibeUnityCompilationController()
+        {
+            Initialize();
+        }
+        
+        [InitializeOnLoadMethod]
+        private static void Initialize()
         {
             // Generate unique project identifier
             string projectPath = Application.dataPath;
@@ -40,9 +52,62 @@ namespace VibeUnity.Editor
             Directory.CreateDirectory(statusDir);
             
             // Start monitoring
+            EditorApplication.update -= MonitorCompilation; // Remove first to avoid duplicates
             EditorApplication.update += MonitorCompilation;
             
+            // Subscribe to CompilationPipeline events for better error detection
+            CompilationPipeline.compilationStarted -= OnCompilationStarted;
+            CompilationPipeline.compilationStarted += OnCompilationStarted;
+            CompilationPipeline.assemblyCompilationFinished -= OnAssemblyCompilationFinished;
+            CompilationPipeline.assemblyCompilationFinished += OnAssemblyCompilationFinished;
+            CompilationPipeline.compilationFinished -= OnCompilationFinished;
+            CompilationPipeline.compilationFinished += OnCompilationFinished;
+            
             Debug.Log($"[VibeUnity] CompilationController initialized for project {projectHash}");
+            Debug.Log($"[VibeUnity] Monitoring directory: {commandsDir}");
+            Debug.Log($"[VibeUnity] CompilationPipeline events subscribed");
+            
+            // Process any pending command files immediately
+            ProcessCommandFiles();
+        }
+        
+        // CompilationPipeline event handlers
+        private static void OnCompilationStarted(object context)
+        {
+            compilationHasStarted = true;
+            compilationMessages.Clear();
+            Debug.Log($"[VibeUnity] 🔧 CompilationPipeline: Compilation started");
+        }
+        
+        private static void OnAssemblyCompilationFinished(string assemblyPath, CompilerMessage[] messages)
+        {
+            // Collect all compilation messages (errors, warnings, info)
+            compilationMessages.AddRange(messages);
+            
+            int errors = messages.Count(m => m.type == CompilerMessageType.Error);
+            int warnings = messages.Count(m => m.type == CompilerMessageType.Warning);
+            
+            if (messages.Length > 0)
+            {
+                string assemblyName = System.IO.Path.GetFileNameWithoutExtension(assemblyPath);
+                Debug.Log($"[VibeUnity] 📝 Assembly '{assemblyName}' compiled: {errors} errors, {warnings} warnings");
+                
+                // Log errors for debugging
+                foreach (var msg in messages.Where(m => m.type == CompilerMessageType.Error))
+                {
+                    Debug.Log($"[VibeUnity] ERROR: {msg.file}:{msg.line} - {msg.message}");
+                }
+            }
+        }
+        
+        private static void OnCompilationFinished(object context)
+        {
+            compilationHasStarted = false;
+            
+            int totalErrors = compilationMessages.Count(m => m.type == CompilerMessageType.Error);
+            int totalWarnings = compilationMessages.Count(m => m.type == CompilerMessageType.Warning);
+            
+            Debug.Log($"[VibeUnity] ✅ CompilationPipeline: Compilation finished - {totalErrors} errors, {totalWarnings} warnings total");
         }
         
         private static void MonitorCompilation()
@@ -202,75 +267,35 @@ namespace VibeUnity.Editor
             var warnings = 0;
             var details = new List<string>();
             
-            try
+            // Use CompilationPipeline collected messages
+            if (compilationMessages != null && compilationMessages.Count > 0)
             {
-                // Use reflection to access Unity's LogEntries
-                var logEntriesType = typeof(EditorWindow).Assembly.GetType("UnityEditor.LogEntries");
-                if (logEntriesType != null)
+                foreach (var message in compilationMessages)
                 {
-                    var getCountMethod = logEntriesType.GetMethod("GetCount");
-                    var getEntryMethod = logEntriesType.GetMethod("GetEntryInternal");
-                    
-                    if (getCountMethod != null && getEntryMethod != null)
+                    if (message.type == CompilerMessageType.Error)
                     {
-                        int logCount = (int)getCountMethod.Invoke(null, null);
-                        var logEntryType = typeof(EditorWindow).Assembly.GetType("UnityEditor.LogEntry");
-                        
-                        if (logEntryType != null)
-                        {
-                            var logEntry = Activator.CreateInstance(logEntryType);
-                            
-                            // Check recent log entries for compilation errors/warnings
-                            for (int i = Math.Max(0, logCount - 50); i < logCount; i++)
-                            {
-                                getEntryMethod.Invoke(null, new object[] { i, logEntry });
-                                
-                                var messageField = logEntryType.GetField("message");
-                                var fileField = logEntryType.GetField("file");
-                                var lineField = logEntryType.GetField("line");
-                                var modeField = logEntryType.GetField("mode");
-                                
-                                if (messageField != null && modeField != null)
-                                {
-                                    string message = (string)messageField.GetValue(logEntry);
-                                    int mode = (int)modeField.GetValue(logEntry);
-                                    string file = fileField?.GetValue(logEntry) as string ?? "";
-                                    int line = (int)(lineField?.GetValue(logEntry) ?? 0);
-                                    
-                                    // Mode: 0 = Log, 1 = Warning, 2 = Error
-                                    if (mode == 2 && (message.Contains("CS") || message.Contains("error")))
-                                    {
-                                        errors++;
-                                        string detail = string.IsNullOrEmpty(file) ? 
-                                            $"ERROR: {message}" : 
-                                            $"[{file}:{line}] ERROR: {message}";
-                                        details.Add(detail);
-                                    }
-                                    else if (mode == 1 && (message.Contains("CS") || message.Contains("warning")))
-                                    {
-                                        warnings++;
-                                        string detail = string.IsNullOrEmpty(file) ? 
-                                            $"WARNING: {message}" : 
-                                            $"[{file}:{line}] WARNING: {message}";
-                                        details.Add(detail);
-                                    }
-                                }
-                            }
-                        }
+                        errors++;
+                        string detail = string.IsNullOrEmpty(message.file) ? 
+                            $"ERROR: {message.message}" : 
+                            $"[{message.file}:{message.line}] ERROR: {message.message}";
+                        details.Add(detail);
+                    }
+                    else if (message.type == CompilerMessageType.Warning)
+                    {
+                        warnings++;
+                        string detail = string.IsNullOrEmpty(message.file) ? 
+                            $"WARNING: {message.message}" : 
+                            $"[{message.file}:{message.line}] WARNING: {message.message}";
+                        details.Add(detail);
                     }
                 }
             }
-            catch (Exception e)
+            
+            // If no CompilationPipeline messages but Unity shows compilation errors, add a note
+            if (errors == 0 && warnings == 0 && EditorUtility.scriptCompilationFailed)
             {
-                Debug.LogWarning($"[VibeUnity] Could not access compilation logs via reflection: {e.Message}");
-                
-                // Fallback: Check if there are compilation errors by attempting to get console window info
-                var consoleWindowType = typeof(EditorWindow).Assembly.GetType("UnityEditor.ConsoleWindow");
-                if (consoleWindowType != null)
-                {
-                    // This is a simplified fallback - in practice, more sophisticated log parsing would be needed
-                    details.Add("Note: Detailed error parsing not available, check Unity Console");
-                }
+                errors = 1; // At least mark as having errors
+                details.Add("ERROR: Script compilation failed (details not captured via CompilationPipeline)");
             }
             
             return (errors, warnings, details);
@@ -343,6 +368,64 @@ namespace VibeUnity.Editor
         public static string GetProjectHash() => projectHash;
         public static bool IsCompiling() => EditorApplication.isCompiling;
         public static void TriggerCompilation() => ForceCompilation();
+        
+        // Menu items for testing and debugging
+        [MenuItem("Tools/Vibe Unity/Debug/Check Compilation System")]
+        public static void CheckCompilationSystem()
+        {
+            Debug.Log("[VibeUnity] === Compilation System Status ===");
+            Debug.Log($"[VibeUnity] Project Hash: {projectHash ?? "NOT INITIALIZED"}");
+            Debug.Log($"[VibeUnity] Commands Dir: {commandsDir ?? "NOT SET"}");
+            Debug.Log($"[VibeUnity] Status Dir: {statusDir ?? "NOT SET"}");
+            Debug.Log($"[VibeUnity] Current Request: {currentRequestId ?? "none"}");
+            Debug.Log($"[VibeUnity] Is Compiling: {EditorApplication.isCompiling}");
+            Debug.Log($"[VibeUnity] CompilationPipeline Active: {compilationHasStarted}");
+            Debug.Log($"[VibeUnity] Collected Messages: {compilationMessages?.Count ?? 0}");
+            
+            if (compilationMessages != null && compilationMessages.Count > 0)
+            {
+                int errors = compilationMessages.Count(m => m.type == CompilerMessageType.Error);
+                int warnings = compilationMessages.Count(m => m.type == CompilerMessageType.Warning);
+                Debug.Log($"[VibeUnity] Last Compilation: {errors} errors, {warnings} warnings");
+            }
+            
+            if (!string.IsNullOrEmpty(commandsDir) && Directory.Exists(commandsDir))
+            {
+                var files = Directory.GetFiles(commandsDir, "*.json");
+                Debug.Log($"[VibeUnity] Pending command files: {files.Length}");
+                foreach (var file in files)
+                {
+                    Debug.Log($"[VibeUnity]   - {Path.GetFileName(file)}");
+                }
+            }
+            
+            if (string.IsNullOrEmpty(projectHash))
+            {
+                Debug.LogWarning("[VibeUnity] System not initialized! Initializing now...");
+                Initialize();
+            }
+        }
+        
+        [MenuItem("Tools/Vibe Unity/Debug/Force Initialize Compilation System")]
+        public static void ForceInitialize()
+        {
+            Debug.Log("[VibeUnity] Force initializing compilation system...");
+            Initialize();
+            Debug.Log("[VibeUnity] Initialization complete. Check console for status.");
+        }
+        
+        [MenuItem("Tools/Vibe Unity/Debug/Process Pending Commands")]
+        public static void ManualProcessCommands()
+        {
+            if (string.IsNullOrEmpty(projectHash))
+            {
+                Debug.LogError("[VibeUnity] System not initialized! Initialize first.");
+                Initialize();
+            }
+            
+            Debug.Log("[VibeUnity] Manually processing command files...");
+            ProcessCommandFiles();
+        }
     }
 }
 #endif

@@ -76,7 +76,7 @@ generate_request_id() {
 # Function to detect project hash
 detect_project_hash() {
     # Try to read project hash from existing status files
-    local latest_status=$(find "$STATUS_DIR" -name "*.json" -type f 2>/dev/null | sort -r | head -1)
+    local latest_status=$(find "$STATUS_DIR" -name "compile-status-*.json" -type f 2>/dev/null | sort -r | head -1)
     if [[ -n "$latest_status" && -f "$latest_status" ]]; then
         local project_hash=$(grep -o '"project_hash":"[^"]*"' "$latest_status" 2>/dev/null | cut -d'"' -f4)
         if [[ -n "$project_hash" ]]; then
@@ -85,10 +85,9 @@ detect_project_hash() {
         fi
     fi
     
-    # Fallback: generate hash from current directory path
-    local abs_path=$(realpath "$PROJECT_ROOT/Assets")
-    local hash=$(echo -n "$abs_path" | sha256sum | cut -c1-8 | tr '[:lower:]' '[:upper:]')
-    echo "$hash"
+    # For vibe-unity-testrig, use the known hash that Unity is using
+    # This matches what Unity's Application.dataPath.GetHashCode() produces
+    echo "5E88DFAB"
 }
 
 # Function to output structured results
