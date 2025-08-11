@@ -6,29 +6,36 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace VibeUnity.Editor
 {
     /// <summary>
-    /// Controls and monitors Unity compilation for external tools like claude-code
-    /// Provides hardened triggers, precise timing, and detailed error/warning reporting
+    /// Simplified Unity compilation controller for external tool integration
+    /// Provides real-time compilation status with persistent state files
     /// </summary>
     [InitializeOnLoad]
-    public class VibeUnityCompilationController : AssetPostprocessor
+    public class VibeUnityCompilationController
     {
-        private static bool wasCompiling = false;
+        // Compilation state
+        private static List<CompilerMessage> compilationMessages = new List<CompilerMessage>();
         private static DateTime compilationStartTime;
         private static DateTime compilationEndTime;
-        private static string currentRequestId = null;
-        private static string projectHash;
-        private static string commandsDir;
-        private static string statusDir;
-        private static readonly bool debugMode = true; // Keep status files for debugging
+        private static bool isCurrentlyCompiling = false;
         
-        // CompilationPipeline error collection
-        private static List<CompilerMessage> compilationMessages = new List<CompilerMessage>();
-        private static bool compilationHasStarted = false;
+        // Paths
+        private static string projectHash;
+        private static string compilationDir;
+        private static string projectHashFile;
+        private static string currentStatusFile;
+        private static string lastErrorsFile;
+        private static string commandQueueDir;
+        
+        // Constants
+        private const string COMPILATION_DIR_NAME = "compilation";
+        private const string STATUS_FILENAME = "current-status.json";
+        private const string HASH_FILENAME = "project-hash.txt";
+        private const string ERRORS_FILENAME = "last-errors.json";
+        private const string COMMAND_QUEUE_DIR = "command-queue";
         
         static VibeUnityCompilationController()
         {
@@ -38,145 +45,242 @@ namespace VibeUnity.Editor
         [InitializeOnLoadMethod]
         private static void Initialize()
         {
-            // Generate unique project identifier
+            SetupPaths();
+            SetupEventHandlers();
+            WriteProjectHash();
+            UpdateCurrentStatus("idle", 0, 0, new List<string>());
+            ProcessCommandQueue();
+            
+            // Initialize settings system
+            var settings = VibeUnitySettings.GetSettings();
+            
+            Debug.Log($"[VibeUnity] Compilation Controller initialized");
+            Debug.Log($"[VibeUnity] Project Hash: {projectHash}");
+            Debug.Log($"[VibeUnity] Status location: {currentStatusFile}");
+            Debug.Log($"[VibeUnity] Settings loaded - Force Recompile: {ShortcutSettings.GetShortcutDescription(settings.shortcuts.forceRecompile)}");
+        }
+        
+        private static void SetupPaths()
+        {
+            // Generate project hash from Application.dataPath
             string projectPath = Application.dataPath;
             projectHash = Math.Abs(projectPath.GetHashCode()).ToString("X8");
             
             // Setup directory paths
             string projectRoot = Directory.GetParent(Application.dataPath).FullName;
-            commandsDir = Path.Combine(projectRoot, ".vibe-unity", "compile-commands");
-            statusDir = Path.Combine(projectRoot, ".vibe-unity", "compile-status");
+            string vibeUnityDir = Path.Combine(projectRoot, ".vibe-unity");
+            compilationDir = Path.Combine(vibeUnityDir, COMPILATION_DIR_NAME);
+            
+            // Setup file paths
+            projectHashFile = Path.Combine(compilationDir, HASH_FILENAME);
+            currentStatusFile = Path.Combine(compilationDir, STATUS_FILENAME);
+            lastErrorsFile = Path.Combine(compilationDir, ERRORS_FILENAME);
+            commandQueueDir = Path.Combine(compilationDir, COMMAND_QUEUE_DIR);
             
             // Ensure directories exist
-            Directory.CreateDirectory(commandsDir);
-            Directory.CreateDirectory(statusDir);
-            
-            // Start monitoring
-            EditorApplication.update -= MonitorCompilation; // Remove first to avoid duplicates
-            EditorApplication.update += MonitorCompilation;
-            
-            // Subscribe to CompilationPipeline events for better error detection
-            CompilationPipeline.compilationStarted -= OnCompilationStarted;
-            CompilationPipeline.compilationStarted += OnCompilationStarted;
-            CompilationPipeline.assemblyCompilationFinished -= OnAssemblyCompilationFinished;
-            CompilationPipeline.assemblyCompilationFinished += OnAssemblyCompilationFinished;
-            CompilationPipeline.compilationFinished -= OnCompilationFinished;
-            CompilationPipeline.compilationFinished += OnCompilationFinished;
-            
-            Debug.Log($"[VibeUnity] CompilationController initialized for project {projectHash}");
-            Debug.Log($"[VibeUnity] Monitoring directory: {commandsDir}");
-            Debug.Log($"[VibeUnity] CompilationPipeline events subscribed");
-            
-            // Process any pending command files immediately
-            ProcessCommandFiles();
+            Directory.CreateDirectory(compilationDir);
+            Directory.CreateDirectory(commandQueueDir);
         }
         
-        // CompilationPipeline event handlers
+        private static void SetupEventHandlers()
+        {
+            // Unsubscribe first to avoid duplicates
+            CompilationPipeline.compilationStarted -= OnCompilationStarted;
+            CompilationPipeline.assemblyCompilationFinished -= OnAssemblyCompilationFinished;
+            CompilationPipeline.compilationFinished -= OnCompilationFinished;
+            EditorApplication.update -= ProcessCommandQueue;
+            
+            // Subscribe to compilation events
+            CompilationPipeline.compilationStarted += OnCompilationStarted;
+            CompilationPipeline.assemblyCompilationFinished += OnAssemblyCompilationFinished;
+            CompilationPipeline.compilationFinished += OnCompilationFinished;
+            
+            // Process commands periodically
+            EditorApplication.update += ProcessCommandQueue;
+        }
+        
+        private static void WriteProjectHash()
+        {
+            try
+            {
+                File.WriteAllText(projectHashFile, projectHash);
+                Debug.Log($"[VibeUnity] Project hash written to: {projectHashFile}");
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[VibeUnity] Failed to write project hash: {e.Message}");
+            }
+        }
+        
         private static void OnCompilationStarted(object context)
         {
-            compilationHasStarted = true;
+            isCurrentlyCompiling = true;
+            compilationStartTime = DateTime.UtcNow;
             compilationMessages.Clear();
-            Debug.Log($"[VibeUnity] 🔧 CompilationPipeline: Compilation started");
+            
+            Debug.Log($"[VibeUnity] Compilation started at {compilationStartTime:HH:mm:ss.fff}");
+            UpdateCurrentStatus("compiling", 0, 0, new List<string> { "Compilation in progress..." });
         }
         
         private static void OnAssemblyCompilationFinished(string assemblyPath, CompilerMessage[] messages)
         {
-            // Collect all compilation messages (errors, warnings, info)
+            // Collect all messages
             compilationMessages.AddRange(messages);
             
             int errors = messages.Count(m => m.type == CompilerMessageType.Error);
             int warnings = messages.Count(m => m.type == CompilerMessageType.Warning);
             
-            if (messages.Length > 0)
+            if (errors > 0 || warnings > 0)
             {
-                string assemblyName = System.IO.Path.GetFileNameWithoutExtension(assemblyPath);
-                Debug.Log($"[VibeUnity] 📝 Assembly '{assemblyName}' compiled: {errors} errors, {warnings} warnings");
-                
-                // Log errors for debugging
-                foreach (var msg in messages.Where(m => m.type == CompilerMessageType.Error))
-                {
-                    Debug.Log($"[VibeUnity] ERROR: {msg.file}:{msg.line} - {msg.message}");
-                }
+                string assemblyName = Path.GetFileNameWithoutExtension(assemblyPath);
+                Debug.Log($"[VibeUnity] Assembly '{assemblyName}': {errors} errors, {warnings} warnings");
             }
+            
+            // Update status with current totals
+            var (totalErrors, totalWarnings, details) = GetCompilationSummary();
+            UpdateCurrentStatus("compiling", totalErrors, totalWarnings, details);
         }
         
         private static void OnCompilationFinished(object context)
         {
-            compilationHasStarted = false;
+            isCurrentlyCompiling = false;
+            compilationEndTime = DateTime.UtcNow;
+            var duration = compilationEndTime - compilationStartTime;
             
-            int totalErrors = compilationMessages.Count(m => m.type == CompilerMessageType.Error);
-            int totalWarnings = compilationMessages.Count(m => m.type == CompilerMessageType.Warning);
+            var (errors, warnings, details) = GetCompilationSummary();
             
-            Debug.Log($"[VibeUnity] ✅ CompilationPipeline: Compilation finished - {totalErrors} errors, {totalWarnings} warnings total");
+            Debug.Log($"[VibeUnity] Compilation finished at {compilationEndTime:HH:mm:ss.fff}");
+            Debug.Log($"[VibeUnity] Duration: {duration.TotalMilliseconds:F0}ms");
+            Debug.Log($"[VibeUnity] Results: {errors} errors, {warnings} warnings");
+            
+            // Determine final status
+            string status = errors > 0 ? "error" : "success";
+            UpdateCurrentStatus(status, errors, warnings, details);
+            
+            // Save error details if there were any
+            if (errors > 0 || warnings > 0)
+            {
+                SaveErrorDetails(errors, warnings, details);
+            }
         }
         
-        private static void MonitorCompilation()
+        private static (int errors, int warnings, List<string> details) GetCompilationSummary()
         {
-            // Check for compilation state changes
-            bool isCompiling = EditorApplication.isCompiling;
+            int errorCount = 0;
+            int warningCount = 0;
+            var details = new List<string>();
             
-            if (isCompiling && !wasCompiling)
+            foreach (var message in compilationMessages)
             {
-                // Compilation started
-                compilationStartTime = DateTime.UtcNow;
-                Debug.Log($"[VibeUnity] ✓ Compilation STARTED at {compilationStartTime:HH:mm:ss.fff}");
-                
-                if (!string.IsNullOrEmpty(currentRequestId))
+                if (message.type == CompilerMessageType.Error)
                 {
-                    WriteStatusFile(currentRequestId, "compiling", compilationStartTime, DateTime.MinValue, 0, 0, 
-                        new List<string> { "Compilation in progress..." });
-                    Debug.Log($"[VibeUnity] Status update sent: compiling (Request: {currentRequestId})");
+                    errorCount++;
+                    string detail = FormatCompilerMessage(message, "ERROR");
+                    details.Add(detail);
                 }
-            }
-            else if (!isCompiling && wasCompiling)
-            {
-                // Compilation finished
-                compilationEndTime = DateTime.UtcNow;
-                var duration = compilationEndTime - compilationStartTime;
-                
-                Debug.Log($"[VibeUnity] ✓ Compilation FINISHED at {compilationEndTime:HH:mm:ss.fff} (Duration: {duration.TotalMilliseconds:F0}ms)");
-                
-                if (!string.IsNullOrEmpty(currentRequestId))
+                else if (message.type == CompilerMessageType.Warning)
                 {
-                    // Small delay to ensure console logs are captured
-                    EditorApplication.delayCall += () =>
-                    {
-                        // Capture compilation results after a brief delay
-                        var (errors, warnings, details) = GetCompilationResults();
-                        WriteStatusFile(currentRequestId, "complete", compilationStartTime, compilationEndTime, errors, warnings, details);
-                        Debug.Log($"[VibeUnity] Final status sent: complete (Errors: {errors}, Warnings: {warnings}, Request: {currentRequestId})");
-                        currentRequestId = null;
-                    };
-                }
-            }
-            else if (!string.IsNullOrEmpty(currentRequestId) && !isCompiling)
-            {
-                // Check if we have a pending request but Unity isn't compiling
-                // This might mean Unity determined no compilation was needed
-                var timeSinceRequest = DateTime.UtcNow - compilationStartTime;
-                if (timeSinceRequest.TotalSeconds > 5) // Wait 5 seconds to be sure
-                {
-                    Debug.Log($"[VibeUnity] ⚠ No compilation detected after 5s - Unity may not need to recompile");
-                    var (errors, warnings, details) = GetCompilationResults();
-                    WriteStatusFile(currentRequestId, "complete", DateTime.UtcNow, DateTime.UtcNow, errors, warnings, 
-                        new List<string> { "No compilation required - scripts are up to date" });
-                    currentRequestId = null;
+                    warningCount++;
+                    string detail = FormatCompilerMessage(message, "WARNING");
+                    details.Add(detail);
                 }
             }
             
-            wasCompiling = isCompiling;
+            // If no messages but Unity reports failure, add generic error
+            if (errorCount == 0 && EditorUtility.scriptCompilationFailed)
+            {
+                errorCount = 1;
+                details.Add("ERROR: Script compilation failed (details not available)");
+            }
             
-            // Check for new command files
-            ProcessCommandFiles();
+            return (errorCount, warningCount, details);
         }
         
-        private static void ProcessCommandFiles()
+        private static string FormatCompilerMessage(CompilerMessage message, string type)
+        {
+            if (string.IsNullOrEmpty(message.file))
+            {
+                return $"{type}: {message.message}";
+            }
+            
+            // Clean up file path for readability
+            string cleanPath = message.file
+                .Replace('\\', '/')
+                .Replace(Application.dataPath, "Assets");
+            
+            return $"[{cleanPath}:{message.line}:{message.column}] {type}: {message.message}";
+        }
+        
+        private static void UpdateCurrentStatus(string status, int errors, int warnings, List<string> details)
         {
             try
             {
-                var commandFiles = Directory.GetFiles(commandsDir, $"compile-request-{projectHash}-*.json")
-                                            .OrderBy(File.GetCreationTime)
-                                            .ToArray();
+                var statusData = new CompilationStatus
+                {
+                    status = status,
+                    errors = errors,
+                    warnings = warnings,
+                    timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+                    projectHash = projectHash,
+                    unityVersion = Application.unityVersion,
+                    details = details.Take(50).ToArray() // Limit details to prevent huge files
+                };
+                
+                string json = JsonUtility.ToJson(statusData, true);
+                File.WriteAllText(currentStatusFile, json);
+                
+                // Also update the legacy compilation.json for backward compatibility
+                string legacyFile = Path.Combine(Directory.GetParent(compilationDir).FullName, "status", "compilation.json");
+                if (Directory.Exists(Path.GetDirectoryName(legacyFile)))
+                {
+                    var legacyData = new
+                    {
+                        status = status == "success" ? "complete" : status,
+                        started = status == "compiling" ? (long?)DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() : null,
+                        startedMs = status == "compiling" ? (long?)DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() : null,
+                        ended = status != "compiling" ? DateTimeOffset.UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss.fff'Z'") : null,
+                        endedMs = status != "compiling" ? DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() : 0
+                    };
+                    File.WriteAllText(legacyFile, JsonUtility.ToJson(legacyData));
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[VibeUnity] Failed to update status: {e.Message}");
+            }
+        }
+        
+        private static void SaveErrorDetails(int errors, int warnings, List<string> details)
+        {
+            try
+            {
+                var errorData = new
+                {
+                    timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+                    errors = errors,
+                    warnings = warnings,
+                    details = details.ToArray()
+                };
+                
+                string json = JsonUtility.ToJson(errorData, true);
+                File.WriteAllText(lastErrorsFile, json);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[VibeUnity] Failed to save error details: {e.Message}");
+            }
+        }
+        
+        private static void ProcessCommandQueue()
+        {
+            if (!Directory.Exists(commandQueueDir))
+                return;
+            
+            try
+            {
+                var commandFiles = Directory.GetFiles(commandQueueDir, "*.json")
+                    .OrderBy(File.GetCreationTime)
+                    .ToArray();
                 
                 foreach (string commandFile in commandFiles)
                 {
@@ -185,246 +289,158 @@ namespace VibeUnity.Editor
                         string json = File.ReadAllText(commandFile);
                         var command = JsonUtility.FromJson<CompileCommand>(json);
                         
-                        if (command != null && !string.IsNullOrEmpty(command.request_id))
+                        if (command != null)
                         {
-                            ProcessCompileCommand(command);
-                            File.Delete(commandFile);
+                            ProcessCommand(command);
                         }
+                        
+                        File.Delete(commandFile);
                     }
                     catch (Exception e)
                     {
-                        Debug.LogError($"[VibeUnity] Failed to process command file {commandFile}: {e.Message}");
+                        Debug.LogError($"[VibeUnity] Failed to process command {commandFile}: {e.Message}");
                         File.Delete(commandFile); // Remove corrupted file
                     }
                 }
             }
             catch (Exception e)
             {
-                Debug.LogError($"[VibeUnity] Error processing command files: {e.Message}");
+                Debug.LogError($"[VibeUnity] Error processing command queue: {e.Message}");
             }
         }
         
-        private static void ProcessCompileCommand(CompileCommand command)
+        private static void ProcessCommand(CompileCommand command)
         {
-            currentRequestId = command.request_id;
-            compilationStartTime = DateTime.UtcNow; // Mark when we received the command
-            
-            Debug.Log($"[VibeUnity] 📝 Processing compile command: {command.action} (Request ID: {command.request_id})");
+            Debug.Log($"[VibeUnity] Processing command: {command.action}");
             
             switch (command.action.ToLower())
             {
                 case "force-compile":
-                case "force-refresh":
-                    // Send initial acknowledgment
-                    WriteStatusFile(command.request_id, "processing", DateTime.UtcNow, DateTime.MinValue, 0, 0, 
-                        new List<string> { "Command received, forcing compilation..." });
-                    
-                    // Use EditorApplication.delayCall to ensure this runs on the main thread
-                    EditorApplication.delayCall += () =>
-                    {
-                        Debug.Log($"[VibeUnity] 🔄 Forcing compilation for request {command.request_id}");
-                        ForceCompilation();
-                        
-                        // Reset compilation start time to now (when we actually trigger)
-                        compilationStartTime = DateTime.UtcNow;
-                    };
+                case "recompile":
+                    ForceRecompile();
                     break;
                     
                 case "check-status":
-                    // Just report current status without forcing compilation
-                    var (errors, warnings, details) = GetCompilationResults();
-                    string status = EditorApplication.isCompiling ? "compiling" : "complete";
-                    WriteStatusFile(command.request_id, status, DateTime.UtcNow, DateTime.UtcNow, errors, warnings, details);
-                    Debug.Log($"[VibeUnity] 📊 Status check complete for request {command.request_id}: {status}");
-                    currentRequestId = null;
+                    // Status is always current in the file, just log it
+                    var (errors, warnings, _) = GetCompilationSummary();
+                    Debug.Log($"[VibeUnity] Current status - Errors: {errors}, Warnings: {warnings}");
+                    break;
+                    
+                case "clear-cache":
+                    AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+                    Debug.Log("[VibeUnity] Asset cache cleared");
                     break;
                     
                 default:
-                    Debug.LogWarning($"[VibeUnity] ❌ Unknown compile command: {command.action}");
-                    WriteStatusFile(command.request_id, "error", DateTime.UtcNow, DateTime.UtcNow, 0, 0, 
-                        new List<string> { $"Unknown command: {command.action}" });
-                    currentRequestId = null;
+                    Debug.LogWarning($"[VibeUnity] Unknown command: {command.action}");
                     break;
             }
         }
         
-        public static void ForceCompilation()
+        private static void ForceRecompile()
         {
-            Debug.Log("[VibeUnity] Forcing asset database refresh and compilation...");
+            Debug.Log("[VibeUnity] Forcing recompilation...");
             
-            // Method 1: Force asset database refresh
+            // Method 1: Force asset refresh
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate | ImportAssetOptions.ForceSynchronousImport);
             
-            // Method 2: Force reimport of all scripts
+            // Method 2: Reimport all scripts
             AssetDatabase.ImportAsset("Assets", ImportAssetOptions.ImportRecursive);
             
-            Debug.Log("[VibeUnity] Forced compilation requested - monitoring for results...");
+            // Method 3: Request script compilation
+            CompilationPipeline.RequestScriptCompilation();
         }
         
-        private static (int errors, int warnings, List<string> details) GetCompilationResults()
+        // Menu Items with Dynamic Keyboard Shortcuts
+        [MenuItem("Tools/Vibe Unity/Compilation/Check Status %#k")] // Default: Ctrl+Shift+K
+        public static void CheckCompilationStatus()
         {
-            var errors = 0;
-            var warnings = 0;
-            var details = new List<string>();
+            var (errors, warnings, details) = GetCompilationSummary();
             
-            // Use CompilationPipeline collected messages
-            if (compilationMessages != null && compilationMessages.Count > 0)
+            Debug.Log("[VibeUnity] === Compilation Status ===");
+            Debug.Log($"[VibeUnity] Status: {(isCurrentlyCompiling ? "Compiling..." : "Idle")}");
+            Debug.Log($"[VibeUnity] Errors: {errors}");
+            Debug.Log($"[VibeUnity] Warnings: {warnings}");
+            Debug.Log($"[VibeUnity] Project Hash: {projectHash}");
+            Debug.Log($"[VibeUnity] Status File: {currentStatusFile}");
+            
+            if (errors > 0 && details.Count > 0)
             {
-                foreach (var message in compilationMessages)
+                Debug.Log("[VibeUnity] First few errors:");
+                foreach (var detail in details.Take(5))
                 {
-                    if (message.type == CompilerMessageType.Error)
-                    {
-                        errors++;
-                        string detail = string.IsNullOrEmpty(message.file) ? 
-                            $"ERROR: {message.message}" : 
-                            $"[{message.file}:{message.line}] ERROR: {message.message}";
-                        details.Add(detail);
-                    }
-                    else if (message.type == CompilerMessageType.Warning)
-                    {
-                        warnings++;
-                        string detail = string.IsNullOrEmpty(message.file) ? 
-                            $"WARNING: {message.message}" : 
-                            $"[{message.file}:{message.line}] WARNING: {message.message}";
-                        details.Add(detail);
-                    }
+                    Debug.Log($"[VibeUnity]   {detail}");
                 }
             }
+        }
+        
+        [MenuItem("Tools/Vibe Unity/Compilation/Force Recompile %#u")] // Default: Ctrl+Shift+U
+        public static void MenuForceRecompile()
+        {
+            ForceRecompile();
+        }
+        
+        [MenuItem("Tools/Vibe Unity/Compilation/Clear Cache %#l")] // Default: Ctrl+Shift+L
+        public static void ClearCompilationCache()
+        {
+            compilationMessages.Clear();
+            UpdateCurrentStatus("idle", 0, 0, new List<string>());
             
-            // If no CompilationPipeline messages but Unity shows compilation errors, add a note
-            if (errors == 0 && warnings == 0 && EditorUtility.scriptCompilationFailed)
+            if (File.Exists(lastErrorsFile))
             {
-                errors = 1; // At least mark as having errors
-                details.Add("ERROR: Script compilation failed (details not captured via CompilationPipeline)");
+                File.Delete(lastErrorsFile);
             }
             
-            return (errors, warnings, details);
+            Debug.Log("[VibeUnity] Compilation cache cleared");
         }
         
-        private static void WriteStatusFile(string requestId, string status, DateTime started, DateTime ended, 
-                                          int errors, int warnings, List<string> details)
+        [MenuItem("Tools/Vibe Unity/Compilation/Open Status Directory")]
+        public static void OpenStatusDirectory()
         {
-            try
+            if (Directory.Exists(compilationDir))
             {
-                var statusData = new CompileStatus
-                {
-                    request_id = requestId,
-                    project_hash = projectHash,
-                    status = status,
-                    started_ms = started != DateTime.MinValue ? ((DateTimeOffset)started).ToUnixTimeMilliseconds() : 0,
-                    ended_ms = ended != DateTime.MinValue ? ((DateTimeOffset)ended).ToUnixTimeMilliseconds() : 0,
-                    duration_ms = ended != DateTime.MinValue && started != DateTime.MinValue ? 
-                        (long)(ended - started).TotalMilliseconds : 0,
-                    errors = errors,
-                    warnings = warnings,
-                    details = details.ToArray(),
-                    timestamp = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeMilliseconds()
-                };
-                
-                string json = JsonUtility.ToJson(statusData, true);
-                string statusFile = Path.Combine(statusDir, $"compile-status-{requestId}.json");
-                
-                File.WriteAllText(statusFile, json);
-                
-                Debug.Log($"[VibeUnity] ✅ Status file written: {Path.GetFileName(statusFile)}");
-                Debug.Log($"[VibeUnity] Status: {status} (Errors: {errors}, Warnings: {warnings}, Duration: {statusData.duration_ms}ms)");
-                
-                if (debugMode)
-                {
-                    Debug.Log($"[VibeUnity] Debug: Status file path: {statusFile}");
-                    Debug.Log($"[VibeUnity] Debug: File size: {new FileInfo(statusFile).Length} bytes");
-                }
+                EditorUtility.RevealInFinder(compilationDir);
             }
-            catch (Exception e)
+            else
             {
-                Debug.LogError($"[VibeUnity] Failed to write status file: {e.Message}");
+                Debug.LogError($"[VibeUnity] Status directory not found: {compilationDir}");
             }
         }
         
-        [System.Serializable]
-        public class CompileCommand
+        // Public API for backward compatibility
+        public static string GetProjectHash() => projectHash;
+        public static bool IsCompiling() => isCurrentlyCompiling;
+        public static void TriggerCompilation() => ForceRecompile();
+        
+        // Settings integration
+        public static void UpdateShortcuts(ShortcutSettings shortcuts)
         {
-            public string action;
-            public string request_id;
-            public long timestamp;
+            // Note: Unity's MenuItem shortcuts are compile-time only
+            // This method is for future dynamic shortcut support
+            Debug.Log($"[VibeUnity] Shortcuts updated - Check Status: {ShortcutSettings.GetShortcutDescription(shortcuts.checkStatus)}");
+            Debug.Log($"[VibeUnity] Shortcuts updated - Force Recompile: {ShortcutSettings.GetShortcutDescription(shortcuts.forceRecompile)}");  
+            Debug.Log($"[VibeUnity] Shortcuts updated - Clear Cache: {ShortcutSettings.GetShortcutDescription(shortcuts.clearCache)}");
         }
         
-        [System.Serializable]
-        public class CompileStatus
+        // Data structures
+        [Serializable]
+        private class CompilationStatus
         {
-            public string request_id;
-            public string project_hash;
             public string status;
-            public long started_ms;
-            public long ended_ms;
-            public long duration_ms;
             public int errors;
             public int warnings;
-            public string[] details;
             public long timestamp;
+            public string projectHash;
+            public string unityVersion;
+            public string[] details;
         }
         
-        // Public API for menu access
-        public static string GetProjectHash() => projectHash;
-        public static bool IsCompiling() => EditorApplication.isCompiling;
-        public static void TriggerCompilation() => ForceCompilation();
-        
-        // Menu items for testing and debugging
-        [MenuItem("Tools/Vibe Unity/Debug/Check Compilation System")]
-        public static void CheckCompilationSystem()
+        [Serializable]
+        private class CompileCommand
         {
-            Debug.Log("[VibeUnity] === Compilation System Status ===");
-            Debug.Log($"[VibeUnity] Project Hash: {projectHash ?? "NOT INITIALIZED"}");
-            Debug.Log($"[VibeUnity] Commands Dir: {commandsDir ?? "NOT SET"}");
-            Debug.Log($"[VibeUnity] Status Dir: {statusDir ?? "NOT SET"}");
-            Debug.Log($"[VibeUnity] Current Request: {currentRequestId ?? "none"}");
-            Debug.Log($"[VibeUnity] Is Compiling: {EditorApplication.isCompiling}");
-            Debug.Log($"[VibeUnity] CompilationPipeline Active: {compilationHasStarted}");
-            Debug.Log($"[VibeUnity] Collected Messages: {compilationMessages?.Count ?? 0}");
-            
-            if (compilationMessages != null && compilationMessages.Count > 0)
-            {
-                int errors = compilationMessages.Count(m => m.type == CompilerMessageType.Error);
-                int warnings = compilationMessages.Count(m => m.type == CompilerMessageType.Warning);
-                Debug.Log($"[VibeUnity] Last Compilation: {errors} errors, {warnings} warnings");
-            }
-            
-            if (!string.IsNullOrEmpty(commandsDir) && Directory.Exists(commandsDir))
-            {
-                var files = Directory.GetFiles(commandsDir, "*.json");
-                Debug.Log($"[VibeUnity] Pending command files: {files.Length}");
-                foreach (var file in files)
-                {
-                    Debug.Log($"[VibeUnity]   - {Path.GetFileName(file)}");
-                }
-            }
-            
-            if (string.IsNullOrEmpty(projectHash))
-            {
-                Debug.LogWarning("[VibeUnity] System not initialized! Initializing now...");
-                Initialize();
-            }
-        }
-        
-        [MenuItem("Tools/Vibe Unity/Debug/Force Initialize Compilation System")]
-        public static void ForceInitialize()
-        {
-            Debug.Log("[VibeUnity] Force initializing compilation system...");
-            Initialize();
-            Debug.Log("[VibeUnity] Initialization complete. Check console for status.");
-        }
-        
-        [MenuItem("Tools/Vibe Unity/Debug/Process Pending Commands")]
-        public static void ManualProcessCommands()
-        {
-            if (string.IsNullOrEmpty(projectHash))
-            {
-                Debug.LogError("[VibeUnity] System not initialized! Initialize first.");
-                Initialize();
-            }
-            
-            Debug.Log("[VibeUnity] Manually processing command files...");
-            ProcessCommandFiles();
+            public string action;
+            public string requestId;
+            public long timestamp;
         }
     }
 }

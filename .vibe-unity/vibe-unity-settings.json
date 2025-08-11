@@ -1,0 +1,10 @@
+{
+    "version": "1.0.0",
+    "shortcuts": {
+        "checkStatus": "%#k",
+        "forceRecompile": "%#u",
+        "clearCache": "%#l"
+    },
+    "enableDebugLogs": true,
+    "autoSaveSettings": true
+}

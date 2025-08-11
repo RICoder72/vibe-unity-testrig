@@ -231,22 +231,31 @@ find Assets -name "Test*" -type f 2>/dev/null
 
 ⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄VIBE-UNITY⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄
 
-# Vibe Unity Integration Guide (Auto-generated - v1.5.2)
+# Vibe Unity Integration Guide (Auto-generated - v2.0.0)
 
-## Claude-Code Automated Workflow
+## Claude-Code Automated Workflow (v2.0.0)
 
 ### Primary Development Pattern
 ```bash
 # 1. Validate compilation after code changes
-./claude-compile-check.sh
-# Exit codes: 0=success, 1=errors, 2=timeout, 3=script error
+./claude-compile-check-simple.sh
+# Exit codes: 0=success, 1=errors, 2=timeout
 
-# 2. Create scenes via JSON (automatic processing)
+# 2. Read current compilation status (instant)
+cat .vibe-unity/compilation/current-status.json
+
+# 3. Create scenes via JSON (automatic processing)
 echo '{"action":"create-scene","name":"TestScene","path":"Assets/Scenes"}' > .vibe-unity/commands/test.json
 
-# 3. Verify results (check logs after 3 seconds)
+# 4. Verify results (check logs after 3 seconds)
 sleep 3 && cat .vibe-unity/commands/logs/latest.log
 ```
+
+### New Simplified Compilation System
+- **Real-time status**: `.vibe-unity/compilation/current-status.json` always reflects current state
+- **Project hash**: `.vibe-unity/compilation/project-hash.txt` for external tool integration
+- **Configurable shortcuts**: Use "Tools > Vibe Unity > Settings" to customize keyboard shortcuts
+- **Command queue**: Drop JSON commands in `.vibe-unity/compilation/command-queue/`
 
 ### Automated Success/Failure Detection
 - ✅ **Success Indicators**: Log contains "Scene created successfully" or "STATUS: SUCCESS"
@@ -254,11 +263,20 @@ sleep 3 && cat .vibe-unity/commands/logs/latest.log
 - 🔄 **Claude Action**: On failure, immediately report specific error and stop workflow
 
 ### File Locations for Claude-Code
-- **Compilation Check**: `./claude-compile-check.sh` (auto-installed)
-- **JSON Commands**: Drop files in `.vibe-unity/commands/` directory
+- **Compilation Check**: `./claude-compile-check-simple.sh` (simplified, instant results)
+- **Current Status**: `.vibe-unity/compilation/current-status.json` (real-time compilation status)
+- **Project Hash**: `.vibe-unity/compilation/project-hash.txt` (for external tools)
+- **Settings**: `.vibe-unity/vibe-unity-settings.json` (configurable shortcuts and options)
+- **Command Queue**: `.vibe-unity/compilation/command-queue/` (drop JSON commands here)
+- **JSON Scene Commands**: Drop files in `.vibe-unity/commands/` directory
 - **Log Verification**: Check `.vibe-unity/commands/logs/latest.log`
-- **Coverage Reports**: `.vibe-unity/commands/coverage-analysis/`
 - **Test Template**: `.vibe-unity/commands/test-scene-creation.json`
+
+### Configurable Keyboard Shortcuts (v2.0.0)
+- **Default Shortcuts**: Ctrl+Shift+K (Status), Ctrl+Shift+U (Recompile), Ctrl+Shift+L (Clear Cache)
+- **Settings Window**: "Tools > Vibe Unity > Settings" to customize shortcuts
+- **Settings File**: `.vibe-unity/vibe-unity-settings.json` (JSON format)
+- **Format**: Use Unity's shortcut format (% = Ctrl/Cmd, # = Shift, & = Alt)
 
 ### Current Component Support (v1.5.2)
 - ✅ **UI**: Canvas, Button, Text, Image, ScrollView, TextMeshPro
@@ -305,12 +323,14 @@ sleep 3 && cat .vibe-unity/commands/logs/latest.log
 - **Log Verification**: ✅ AUTOMATED (structured log parsing)
 - **Error Detection**: ✅ AUTOMATED (exit codes + log analysis)
 
-## Automated Claude Instructions
-* **ALWAYS** run `./claude-compile-check.sh` after modifying C# scripts
+## Automated Claude Instructions (v2.0.0)
+* **ALWAYS** run `./claude-compile-check-simple.sh` after modifying C# scripts
 * **ONLY proceed** if compilation check returns exit code 0
+* **READ status directly** from `.vibe-unity/compilation/current-status.json` for instant results
 * **VERIFY scene creation** by checking `.vibe-unity/commands/logs/latest.log` for success/error messages
-* **REPORT failures immediately** with specific error details from logs
+* **REPORT failures immediately** with specific error details from logs and status file
 * **DO NOT** create .meta files unless explicitly requested
+* **CUSTOMIZE shortcuts** via "Tools > Vibe Unity > Settings" if defaults conflict
 * **ASK USER** for guidance only when encountering system-level failures or unsupported features
 
 ## For Detailed Usage

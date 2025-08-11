@@ -1,23 +1,24 @@
-#!/bin/bash
+#\!/bin/bash
 
-# claude-compile-check-v2.sh - File-based Unity compilation validator for claude-code integration
+# claude-compile-check-v2.sh - Unity compilation validator using Unity's internal status system
 # 
-# Purpose: Validates Unity C# script compilation using file-based communication with Unity
-# Provides hardened triggers, precise timing, and detailed error/warning reporting
+# Purpose: Validates Unity C# script compilation by leveraging Unity's CompilationPipeline events
+# Returns structured output with error/warning details from Unity's internal detection
 #
 # Exit Codes:
 #   0 = Success (no compilation errors)
 #   1 = Compilation errors found
 #   2 = Timeout or Unity not accessible
 #   3 = Script execution error
+#
+# Usage: ./claude-compile-check-v2.sh [--include-warnings]
 
-SCRIPT_VERSION="2.0.1"
 INCLUDE_WARNINGS=false
-TIMEOUT=45  # Increased for longer compilation times (like first-time compile)
-RETRY_COUNT=0
-MAX_RETRIES=2
-POLL_INTERVAL=0.5
-DEBUG_STATUS=false
+SCRIPT_VERSION="2.0.0"
+PROJECT_NAME=""
+PROJECT_HASH=""
+REQUEST_ID=""
+DEBUG_MODE=${DEBUG_MODE:-false}
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -26,28 +27,23 @@ while [[ $# -gt 0 ]]; do
             INCLUDE_WARNINGS=true
             shift
             ;;
-        --timeout)
-            TIMEOUT="$2"
-            shift 2
-            ;;
         --debug)
-            DEBUG_STATUS=true
+            DEBUG_MODE=true
             shift
             ;;
         --help|-h)
-            echo "Usage: $0 [--include-warnings] [--timeout SECONDS] [--debug]"
-            echo "Validates Unity compilation using file-based communication"
+            echo "Usage: $0 [--include-warnings] [--debug]"
+            echo "Validates Unity compilation using Unity's internal status system"
             echo ""
             echo "Options:"
             echo "  --include-warnings  Include warning details in output"
-            echo "  --timeout SECONDS   Compilation timeout in seconds (default: 45)"
-            echo "  --debug             Enable debug status monitoring"
+            echo "  --debug             Keep status files for debugging"
             echo "  --help, -h          Show this help message"
             echo ""
             echo "Exit codes:"
             echo "  0 = Success (no errors)"
-            echo "  1 = Compilation errors found" 
-            echo "  2 = Timeout/Unity communication failed"
+            echo "  1 = Compilation errors found"
+            echo "  2 = Timeout/Unity not found"
             echo "  3 = Script execution error"
             exit 0
             ;;
@@ -59,323 +55,285 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# Setup paths
-PROJECT_ROOT=$(pwd)
-COMMANDS_DIR="$PROJECT_ROOT/.vibe-unity/compile-commands"
-STATUS_DIR="$PROJECT_ROOT/.vibe-unity/compile-status"
-
-# Ensure directories exist
-mkdir -p "$COMMANDS_DIR"
-mkdir -p "$STATUS_DIR"
-
-# Function to generate unique request ID
-generate_request_id() {
-    echo "$(date +%s%3N)-$$-$(uuidgen | cut -d'-' -f1)"
-}
-
-# Function to detect project hash
-detect_project_hash() {
-    # Try to read project hash from existing status files
-    local latest_status=$(find "$STATUS_DIR" -name "compile-status-*.json" -type f 2>/dev/null | sort -r | head -1)
-    if [[ -n "$latest_status" && -f "$latest_status" ]]; then
-        local project_hash=$(grep -o '"project_hash":"[^"]*"' "$latest_status" 2>/dev/null | cut -d'"' -f4)
-        if [[ -n "$project_hash" ]]; then
-            echo "$project_hash"
-            return 0
-        fi
-    fi
-    
-    # For vibe-unity-testrig, use the known hash that Unity is using
-    # This matches what Unity's Application.dataPath.GetHashCode() produces
-    echo "5E88DFAB"
-}
-
 # Function to output structured results
 output_result() {
     local status="$1"
-    local errors="$2"
-    local warnings="$3"
+    local error_count="$2"
+    local warning_count="$3"
     local details="$4"
-    local duration="$5"
     
     echo "STATUS: $status"
-    echo "ERRORS: $errors"
-    echo "WARNINGS: $warnings"
+    echo "ERRORS: $error_count"
+    echo "WARNINGS: $warning_count"
+    if [[ -n "$details" ]]; then
+        echo "DETAILS:"
+        echo "$details"
+    fi
+    echo "SCRIPT_VERSION: $SCRIPT_VERSION"
+}
+
+# Function to detect project name from current directory
+detect_project_name() {
+    local current_dir=$(pwd)
+    PROJECT_NAME=$(basename "$current_dir")
+    [[ "$DEBUG_MODE" == "true" ]] && echo "[DEBUG] Detected project name: $PROJECT_NAME" >&2
+}
+
+# Function to get project hash (matching Unity's hash generation)
+get_project_hash() {
+    local project_path="$(pwd)/Assets"
+    # Unity uses the absolute path hash - we need to match it exactly
+    # Unity's VibeUnityCompilationController uses GetHashCode on Application.dataPath
+    # For now, we'll read it from an existing status file or use a fallback
     
-    if [[ -n "$details" && "$details" != "null" && "$details" != "[]" ]]; then
-        echo "DETAILS:"
-        echo "$details" | sed 's/^/  /'
-    else
-        echo "DETAILS:"
-        case "$status" in
-            "SUCCESS")
-                if [[ -n "$duration" && "$duration" != "0" ]]; then
-                    echo "  Compilation completed successfully in ${duration}ms"
-                else
-                    echo "  No compilation required - scripts are up to date"
-                fi
-                ;;
-            "ERRORS")
-                echo "  Compilation failed - check Unity Console for details"
-                ;;
-            "TIMEOUT")
-                echo "  Compilation timed out after ${TIMEOUT} seconds"
-                ;;
-        esac
+    # Try to find the hash from existing files
+    if [[ -d ".vibe-unity/compile-status" ]]; then
+        local existing_file=$(ls -t .vibe-unity/compile-status/compile-status-*.json 2>/dev/null | head -1)
+        if [[ -n "$existing_file" ]]; then
+            PROJECT_HASH=$(grep -o '"project_hash":"[^"]*"' "$existing_file" | cut -d'"' -f4)
+            [[ "$DEBUG_MODE" == "true" ]] && echo "[DEBUG] Found project hash from existing file: $PROJECT_HASH" >&2
+        fi
     fi
     
-    echo "SCRIPT_VERSION: $SCRIPT_VERSION"
+    # Fallback: generate a predictable hash
+    if [[ -z "$PROJECT_HASH" ]]; then
+        # Use the project path to generate a hash (this may not match Unity's exactly)
+        PROJECT_HASH=$(echo -n "$project_path" | md5sum | cut -c1-8 | tr '[:lower:]' '[:upper:]')
+        echo "[WARNING] Generated project hash may not match Unity's: $PROJECT_HASH" >&2
+    fi
+}
+
+# Function to generate unique request ID
+generate_request_id() {
+    if command -v uuidgen >/dev/null 2>&1; then
+        REQUEST_ID="compile-$(uuidgen | tr '[:upper:]' '[:lower:]' | cut -c1-8)"
+    else
+        REQUEST_ID="compile-$(date +%s)-$$"
+    fi
+    [[ "$DEBUG_MODE" == "true" ]] && echo "[DEBUG] Request ID: $REQUEST_ID" >&2
 }
 
 # Function to send compile command to Unity
 send_compile_command() {
-    local request_id="$1"
-    local project_hash="$2"
-    local timestamp=$(date +%s%3N)
+    local action="$1"
+    local commands_dir=".vibe-unity/compile-commands"
     
-    local command_file="$COMMANDS_DIR/compile-request-${project_hash}-${request_id}.json"
+    # Ensure directory exists
+    mkdir -p "$commands_dir"
     
-    cat > "$command_file" << EOF
+    # Create command file
+    local command_file="$commands_dir/compile-request-${PROJECT_HASH}-${REQUEST_ID}.json"
+    cat > "$command_file" << EOCMD
 {
-    "action": "force-compile",
-    "request_id": "$request_id",
-    "timestamp": $timestamp
+    "action": "$action",
+    "request_id": "$REQUEST_ID",
+    "timestamp": $(date +%s)000
 }
-EOF
-    
-    if [[ $? -eq 0 ]]; then
-        echo "Compile command sent: $request_id" >&2
-        return 0
-    else
-        echo "Failed to write command file" >&2
-        return 1
-    fi
+EOCMD
+    echo "Command sent to Unity: $action" >&2
+    [[ "$DEBUG_MODE" == "true" ]] && echo "[DEBUG] Command file: $command_file" >&2
 }
 
-# Function to focus Unity window to ensure it processes file changes
-focus_unity() {
-    echo "Focusing Unity window to trigger file change detection..." >&2
+# Function to read Unity's compilation status
+read_unity_status() {
+    local status_dir=".vibe-unity/compile-status"
+    local status_file="$status_dir/compile-status-${REQUEST_ID}.json"
+    local timeout=60
+    local elapsed=0
+    local last_status=""
     
-    local focus_result=$(powershell.exe -Command "
+    echo "Waiting for Unity compilation status..." >&2
+    
+    while [[ $elapsed -lt $timeout ]]; do
+        if [[ -f "$status_file" ]]; then
+            # Read the status file
+            local content=$(cat "$status_file" 2>/dev/null)
+            
+            if [[ -z "$content" ]]; then
+                # File exists but empty, Unity may still be writing
+                sleep 0.5
+                continue
+            fi
+            
+            # Parse status
+            local status=$(echo "$content" | grep -o '"status":"[^"]*"' | cut -d'"' -f4)
+            
+            # Only print status change
+            if [[ "$status" != "$last_status" ]]; then
+                echo "Unity status: $status" >&2
+                last_status="$status"
+            fi
+            
+            if [[ "$status" == "complete" ]] || [[ "$status" == "error" ]]; then
+                # Parse error and warning counts
+                local errors=$(echo "$content" | grep -o '"errors":[0-9]*' | cut -d':' -f2)
+                local warnings=$(echo "$content" | grep -o '"warnings":[0-9]*' | cut -d':' -f2)
+                
+                # Parse details if present
+                local details=""
+                if echo "$content" | grep -q '"details":\['; then
+                    # Extract and format details array
+                    details=$(echo "$content" | python3 -c "
+import sys, json
+try:
+    data = json.load(sys.stdin)
+    if 'details' in data and data['details']:
+        for detail in data['details']:
+            print('  ' + detail)
+except:
+    pass
+" 2>/dev/null)
+                    
+                    # Fallback if python fails
+                    if [[ -z "$details" ]]; then
+                        details=$(echo "$content" | sed -n 's/.*"details":\[\([^]]*\)\].*/\1/p' | sed 's/"//g' | sed 's/,/\n  /g')
+                    fi
+                fi
+                
+                echo "Compilation complete - Errors: $errors, Warnings: $warnings" >&2
+                
+                # Include warnings in details if requested
+                if [[ "$INCLUDE_WARNINGS" == "true" ]] && [[ -n "$details" ]]; then
+                    output_result "$(echo $status | tr '[:lower:]' '[:upper:]')" "$errors" "$warnings" "$details"
+                elif [[ $errors -gt 0 ]]; then
+                    # Only show error details
+                    local error_details=$(echo "$details" | grep -E "ERROR|error" || echo "$details")
+                    output_result "$(echo $status | tr '[:lower:]' '[:upper:]')" "$errors" "$warnings" "$error_details"
+                else
+                    output_result "SUCCESS" "$errors" "$warnings" ""
+                fi
+                
+                # Clean up files if not in debug mode
+                if [[ "$DEBUG_MODE" != "true" ]]; then
+                    rm -f "$status_file"
+                    rm -f "$commands_dir/compile-request-${PROJECT_HASH}-${REQUEST_ID}.json"
+                else
+                    echo "[DEBUG] Status file kept: $status_file" >&2
+                fi
+                
+                # Return appropriate exit code
+                if [[ $errors -gt 0 ]]; then
+                    return 1
+                else
+                    return 0
+                fi
+            elif [[ "$status" == "compiling" ]] || [[ "$status" == "processing" ]]; then
+                # Unity is still processing
+                :
+            fi
+        else
+            # Check if Unity needs more prompting
+            if [[ $elapsed -eq 5 ]] || [[ $elapsed -eq 10 ]]; then
+                echo "Still waiting for Unity response..." >&2
+                # Try to trigger Unity refresh again
+                trigger_unity_refresh
+            fi
+        fi
+        
+        sleep 1
+        ((elapsed++))
+    done
+    
+    echo "Timeout waiting for Unity status response" >&2
+    output_result "TIMEOUT" "0" "0" "Unity did not respond within $timeout seconds. Ensure Unity is running and the VibeUnity package is installed."
+    return 2
+}
+
+# Function to focus Unity window
+focus_unity() {
+    local project_pattern="$PROJECT_NAME"
+    
+    if [[ -z "$project_pattern" ]]; then
+        project_pattern="Unity"
+    fi
+    
+    powershell.exe -Command "
+    \$unityProcesses = Get-Process -Name 'Unity' -ErrorAction SilentlyContinue | Where-Object { \$_.MainWindowTitle -ne '' };
+    \$targetUnity = \$null;
+    
+    if ('$project_pattern' -ne 'Unity') {
+        \$targetUnity = \$unityProcesses | Where-Object { \$_.MainWindowTitle -like '*$project_pattern*' } | Select-Object -First 1;
+    }
+    
+    if (-not \$targetUnity -and \$unityProcesses) {
+        \$targetUnity = \$unityProcesses | Select-Object -First 1;
+    }
+    
+    if (\$targetUnity) {
+        Add-Type -AssemblyName Microsoft.VisualBasic;
+        [Microsoft.VisualBasic.Interaction]::AppActivate(\$targetUnity.Id);
+        Write-Host \"Unity focused: \$((\$targetUnity).MainWindowTitle)\";
+    } else {
+        Write-Host 'No Unity process found' -ForegroundColor Red;
+        exit 1
+    }" 2>/dev/null
+    
+    return $?
+}
+
+# Function to trigger Unity refresh
+trigger_unity_refresh() {
+    [[ "$DEBUG_MODE" == "true" ]] && echo "[DEBUG] Triggering Unity asset refresh..." >&2
+    
+    powershell.exe -Command "
     \$unity = Get-Process -Name 'Unity' -ErrorAction SilentlyContinue | 
-              Where-Object { \$_.MainWindowTitle -like '*vibe-unity-testrig*' } | 
+              Where-Object { \$_.MainWindowTitle -like '*${PROJECT_NAME}*' } | 
               Select-Object -First 1;
     
     if (\$unity) {
+        Add-Type -AssemblyName System.Windows.Forms;
+        [System.Windows.Forms.SendKeys]::SendWait('^r');
+        Start-Sleep -Milliseconds 100;
+        [System.Windows.Forms.SendKeys]::SendWait('{F5}');
+    }" 2>/dev/null
+}
+
+# Function to focus back to terminal
+focus_terminal() {
+    powershell.exe -Command "
+    \$terminal = Get-Process -Name 'WindowsTerminal','cmd','powershell' -ErrorAction SilentlyContinue | 
+                 Where-Object { \$_.MainWindowTitle -ne '' } | Select-Object -First 1;
+    if (\$terminal) {
         Add-Type -AssemblyName Microsoft.VisualBasic;
-        [Microsoft.VisualBasic.Interaction]::AppActivate(\$unity.Id);
-        Write-Host 'Unity window focused for file detection';
-        \$true;
-    } else {
-        Write-Host 'Unity window not found' -ForegroundColor Yellow;
-        \$false;
-    }" 2>/dev/null)
-    
-    # Parse the result
-    if echo "$focus_result" | grep -q "Unity window focused"; then
-        echo "✓ Unity focused successfully" >&2
-        return 0
-    else
-        echo "✗ Failed to focus Unity" >&2
-        return 1
-    fi
-}
-
-# Function to wait for status response with improved timing
-wait_for_status() {
-    local request_id="$1"
-    local start_time=$(date +%s)
-    local status_file="$STATUS_DIR/compile-status-${request_id}.json"
-    local compilation_detected=false
-    local first_status=""
-    
-    echo "Waiting for compilation status (timeout: ${TIMEOUT}s)..." >&2
-    
-    while [[ $(($(date +%s) - start_time)) -lt $TIMEOUT ]]; do
-        local elapsed=$(($(date +%s) - start_time))
-        
-        # Debug: Show what we're looking for every 5 seconds
-        if [[ "$DEBUG_STATUS" == "true" && $((elapsed % 5)) -eq 0 && $elapsed -gt 0 ]]; then
-            echo "Debug: ${elapsed}s elapsed, checking $status_file" >&2
-            if [[ -f "$status_file" ]]; then
-                echo "Debug: Status file exists, size: $(wc -c < "$status_file" 2>/dev/null || echo "0") bytes" >&2
-            else
-                echo "Debug: Status file does not exist yet" >&2
-            fi
-        fi
-        
-        if [[ -f "$status_file" ]]; then
-            local json_content=$(cat "$status_file" 2>/dev/null)
-            if [[ -n "$json_content" ]]; then
-                local current_status=$(echo "$json_content" | grep -o '"status":"[^"]*"' | cut -d'"' -f4)
-                
-                # Track if we've seen Unity actually start compiling
-                if [[ "$current_status" == "compiling" && "$compilation_detected" == "false" ]]; then
-                    compilation_detected=true
-                    echo "✓ Compilation started after ${elapsed}s" >&2
-                elif [[ "$current_status" == "complete" ]]; then
-                    if [[ "$compilation_detected" == "true" ]]; then
-                        echo "✓ Compilation completed after ${elapsed}s" >&2
-                        echo "$json_content"
-                        return 0
-                    else
-                        echo "⚠ Unity reports 'complete' but we never saw it start compiling (${elapsed}s)" >&2
-                        # Keep waiting a bit more to see if actual compilation starts
-                        if [[ $elapsed -lt 5 ]]; then
-                            sleep 1
-                            continue
-                        fi
-                        # Accept the result but note the suspicious timing
-                        echo "Accepting completion status (may not have needed compilation)" >&2
-                        echo "$json_content"
-                        return 0
-                    fi
-                elif [[ "$current_status" == "error" ]]; then
-                    echo "✗ Compilation error after ${elapsed}s" >&2
-                    echo "$json_content"
-                    return 0
-                fi
-                
-                # Store first status for debugging
-                if [[ -z "$first_status" ]]; then
-                    first_status="$current_status"
-                    echo "First status: $current_status after ${elapsed}s" >&2
-                fi
-            fi
-        fi
-        sleep "$POLL_INTERVAL"
-    done
-    
-    echo "Timeout waiting for status after ${TIMEOUT}s" >&2
-    echo "Debug: compilation_detected=$compilation_detected, first_status=$first_status" >&2
-    return 1
-}
-
-# Function to parse status JSON (simplified bash parsing)
-parse_status_json() {
-    local json="$1"
-    
-    # Extract key values using grep and sed
-    local status=$(echo "$json" | grep -o '"status":"[^"]*"' | cut -d'"' -f4)
-    local errors=$(echo "$json" | grep -o '"errors":[0-9]*' | cut -d':' -f2)
-    local warnings=$(echo "$json" | grep -o '"warnings":[0-9]*' | cut -d':' -f2)
-    local duration=$(echo "$json" | grep -o '"duration_ms":[0-9]*' | cut -d':' -f2)
-    
-    # Extract details array (simplified)
-    local details=""
-    if echo "$json" | grep -q '"details":\['; then
-        details=$(echo "$json" | sed -n 's/.*"details":\[\([^]]*\)\].*/\1/p' | sed 's/",""/\n/g' | sed 's/^"//;s/"$//')
-        # Clean up the details formatting
-        if [[ -n "$details" && "$details" != "null" ]]; then
-            details=$(echo "$details" | sed 's/\\n/\n/g' | sed 's/\\"//g')
-            # Only include warnings if requested
-            if [[ "$INCLUDE_WARNINGS" != "true" ]]; then
-                details=$(echo "$details" | grep -v "WARNING" || true)
-            fi
-        fi
-    fi
-    
-    # Default values if not found
-    status=${status:-"unknown"}
-    errors=${errors:-"0"}
-    warnings=${warnings:-"0"}
-    duration=${duration:-"0"}
-    
-    echo "$status|$errors|$warnings|$details|$duration"
-}
-
-# Function to cleanup old files
-cleanup_old_files() {
-    # Clean up command files older than 1 minute
-    find "$COMMANDS_DIR" -name "*.json" -type f -mmin +1 2>/dev/null | xargs rm -f 2>/dev/null || true
-    
-    # Clean up status files older than 5 minutes  
-    find "$STATUS_DIR" -name "*.json" -type f -mmin +5 2>/dev/null | xargs rm -f 2>/dev/null || true
+        [Microsoft.VisualBasic.Interaction]::AppActivate(\$terminal.Id);
+    }" 2>/dev/null
 }
 
 # Main execution function
 main() {
-    local project_hash=$(detect_project_hash)
-    local request_id=$(generate_request_id)
+    # Step 1: Detect project name
+    detect_project_name
     
-    echo "Unity compilation check v$SCRIPT_VERSION" >&2
-    echo "Project hash: $project_hash" >&2
-    echo "Request ID: $request_id" >&2
+    # Step 2: Get project hash
+    get_project_hash
     
-    # Clean up old files first
-    cleanup_old_files
+    # Step 3: Generate unique request ID
+    generate_request_id
     
-    # Send compile command to Unity
-    if ! send_compile_command "$request_id" "$project_hash"; then
-        output_result "ERROR" "0" "0" "Failed to send compile command to Unity"
-        return 3
+    # Step 4: Focus Unity
+    if \! focus_unity; then
+        output_result "ERROR" "0" "0" "Failed to focus Unity window. Ensure Unity is running with the project open."
+        exit 2
     fi
     
-    echo "Command sent, giving Unity time to process..." >&2
+    # Step 5: Send compile command to Unity
+    send_compile_command "force-compile"
     
-    # CRITICAL: Give Unity time to detect file changes and process the command
-    # Without this delay, we check compilation status before Unity realizes it needs to compile
-    sleep 3
+    # Step 6: Trigger Unity refresh as backup
+    trigger_unity_refresh
     
-    # Focus Unity to ensure it processes file changes (Windows-specific timing issue)
-    if focus_unity; then
-        echo "Unity focused, continuing without returning focus to WSL (avoids hanging)" >&2
-    else
-        echo "Warning: Could not focus Unity, but continuing..." >&2
-    fi
-    
-    # Give Unity additional time to start processing (especially important for first-time compilation)
+    # Give Unity a moment to process the command
     sleep 2
     
-    echo "Starting status monitoring..." >&2
+    # Step 7: Read Unity's compilation status
+    read_unity_status
+    local result=$?
     
-    # Wait for status response with improved timing detection
-    local json_response=""
-    if json_response=$(wait_for_status "$request_id"); then
-        # Parse the response
-        local parsed=$(parse_status_json "$json_response")
-        local status=$(echo "$parsed" | cut -d'|' -f1)
-        local errors=$(echo "$parsed" | cut -d'|' -f2)
-        local warnings=$(echo "$parsed" | cut -d'|' -f3)
-        local details=$(echo "$parsed" | cut -d'|' -f4)
-        local duration=$(echo "$parsed" | cut -d'|' -f5)
-        
-        # Clean up status file
-        rm -f "$STATUS_DIR/compile-status-${request_id}.json" 2>/dev/null || true
-        
-        # Output results
-        case "$status" in
-            "complete")
-                if [[ "$errors" -eq 0 ]]; then
-                    output_result "SUCCESS" "$errors" "$warnings" "$details" "$duration"
-                    return 0
-                else
-                    output_result "ERRORS" "$errors" "$warnings" "$details" "$duration"
-                    return 1
-                fi
-                ;;
-            "compiling")
-                output_result "TIMEOUT" "$errors" "$warnings" "Unity is still compiling" "$duration"
-                return 2
-                ;;
-            "error")
-                output_result "ERROR" "$errors" "$warnings" "$details" "$duration"
-                return 3
-                ;;
-            *)
-                output_result "ERROR" "0" "0" "Unknown status: $status"
-                return 3
-                ;;
-        esac
-    else
-        output_result "TIMEOUT" "0" "0" "No response from Unity after ${TIMEOUT} seconds"
-        return 2
-    fi
+    # Step 8: Focus back to terminal
+    focus_terminal
+    
+    exit $result
 }
-
-# Handle script interruption
-trap 'echo "Script interrupted" >&2; exit 3' INT TERM
 
 # Execute main function
 main "$@"
-exit $?
